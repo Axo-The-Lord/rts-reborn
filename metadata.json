@@ -1,0 +1,8 @@
+{
+    "name": "RTS Reborn",
+    "description": "A (WIP) restored version of N4K0 and Sivelos's Return to Sender mod, rebuilt from the ground-up!",
+	"internalname": "rts-reborn",
+    "version": "0.1",
+    "author": "The RTS Team",
+    "mpcompat": true
+}
