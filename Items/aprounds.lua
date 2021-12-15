@@ -28,3 +28,10 @@ item:setLog{
 	date = "3/07/2056",
 	priority = "Standard"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "Deal 20% extra damage to bosses.", "+20% damage.")
+  end
+end)

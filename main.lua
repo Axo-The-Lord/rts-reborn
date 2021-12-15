@@ -1,18 +1,42 @@
--- RTS REBORN --
+-- RTS REBORN!
 
 -- CORE --
 
-require("Core.abilityCharge")
-require("Misc.damage")
-require("Core.lunar")
-require("Core.mapObjectLib")
-require("Misc.vignette")
+local Libraries = {
+  "abilityCharge",
+  "lunar",
+  "mapObjectLib", -- This version of MapObjectLib is really old and I don't want to use it but for some reason everything breaks when I try to use the newest version aaaaaaaaaaaa
+  "util"
+}
+for _, core in ipairs(Libraries) do
+  local c = require("Core."..core)
+end
+
+-- MISCELLANEOUS --
+
+local Miscellaneous = {
+  "text",
+  "vignette",
+  "title",
+}
+for _, misc in ipairs(Miscellaneous) do
+  local m = require("Misc."..misc)
+end
 
 -- MAPOBJECTS --
 
-require("MapObjects.useBarrel")
-require("MapObjects.categoryChest")
-require("MapObjects.lunarBud")
+local MapObjects = {
+  "categoryChest",
+  "lunarBud",
+  "useBarrel"
+}
+for _, mapobject in ipairs(MapObjects) do
+  local mo = require("MapObjects."..mapobject)
+end
+
+-- ACTORS --
+
+require("Actors.newt")
 
 -- ITEMS --
 
@@ -21,30 +45,26 @@ local Items = {
   "aprounds",
   "backupMag",
   "crystal",
-
   -- Uncommon
   "warhorn",
   "pauldron",
   "roseBuckler",
-  -- "fuelCell",
-  "bandolier",
+  "fuelCell",
+  -- "bandolier",
   "deathMark",
-
   -- Rare
   "brainstalks",
   "wakeOfVultures",
   "afterburner",
-
   -- Boss
   "planula",
-
   -- Lunar
   "beads",
   -- "transcendence",
   "brittleCrown",
   "shapedGlass",
-  -- "spinelTonic", Not ready yet
-
+  "spinelTonic",
+  "effigy",
   -- Use
   "elephant",
   "hud",
@@ -53,3 +73,7 @@ local Items = {
 for _, item in ipairs(Items) do
   local i = require("Items."..item)
 end
+
+-- SURVIVORS --
+
+require("survivors/artificer")

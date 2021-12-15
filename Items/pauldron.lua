@@ -35,31 +35,32 @@ end)
 -- Timer
 callback.register("onActorInit", function(actor)
   if isa(actor, "PlayerInstance") then
-    actor:set("killstreak", 0)
-    actor:set("pauldron_timer", 60)
+    actor:getData().killstreak = 0
+    actor:getData().pauldron_timer = 60
   end
 end)
 
 callback.register("onNPCDeathProc", function(npc, player)
   if player:isValid() then
-    player:set("killstreak", player:get("killstreak") + 1)
+    player:getData().killstreak = player:getData().killstreak + 1
   end
 end)
 
 callback.register("onPlayerStep", function(player)
+  local playerData = player:getData()
   local stack = player:countItem(item)
-  if player:get("killstreak") > 0 then
-    if player:get("killstreak") >= 3 and stack > 0 then
+  if playerData.killstreak > 0 then
+    if playerData.killstreak >= 3 and stack > 0 then
       if not sound:isPlaying() then
         sound:play(0.9 + math.random() * 0.4, 0.8)
       end
       player:applyBuff(frenzy, 6 * 60 + ((4 * 60) * (stack - 1)))
     end
-    if player:get("pauldron_timer") <= 0 then
-      player:set("killstreak", 0)
-      player:set("pauldron_timer", 60)
+    if playerData.pauldron_timer <= 0 then
+      playerData.killstreak = 0
+      playerData.pauldron_timer = 60
     else
-      player:set("pauldron_timer", player:get("pauldron_timer") - 1)
+      playerData.pauldron_timer = playerData.pauldron_timer - 1
     end
   end
 end)
@@ -73,3 +74,10 @@ item:setLog{
 	date = "04/05/2056",
 	priority = "&g&Priority&!&"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "Killing 3 enemies within 1 second incrases movement and attack speed for 6 seconds.", "+4 seconds.")
+  end
+end)

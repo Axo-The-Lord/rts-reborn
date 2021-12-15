@@ -16,3 +16,10 @@ item:setLog{
 	date = "Some Date", -- add Date!
 	priority = "&g&Standard&!&"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "Add 1 charge to your equipment and decrease cooldown by 15%.", "+1 charge, +15% cooldown reduction.")
+  end
+end)

@@ -1,7 +1,7 @@
 -- Skill Charges
 
 Ability = {}
-local hudElement = Sprite.load("Core/resources/skillCharge.png", 2, 9, 8)
+local hudElement = Sprite.load("Graphics/UI/skillCharge.png", 2, 9, 8)
 
 local abilities = {
   Equipment = 0,

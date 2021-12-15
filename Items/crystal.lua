@@ -10,7 +10,7 @@ local procSprite = Sprite.load("Items/resources/crystalBonus.png", 5, 5.5, 5.5)
 local procSound = Sound.load("Items/resources/crystal.ogg")
 local sparks = Object.find("EfSparks", "vanilla")
 
--- Timer (thanks Neik!)
+-- Timer
 local timer = 0
 callback.register("onStep", function()
   timer = timer + 1
@@ -57,3 +57,10 @@ item:setLog{
 	date = "05/23/2056",
 	priority = "Standard"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "+20% extra damage to enemies within a 13m radius.", "+20% damage.")
+  end
+end)

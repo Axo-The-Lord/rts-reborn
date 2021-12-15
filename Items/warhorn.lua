@@ -50,3 +50,10 @@ item:setLog{
 	date = "4/12/2056",
 	priority = "&g&Standard&!&"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "+70% attack speed for 8 seconds when activating Use Items.", "+4 seconds.")
+  end
+end)

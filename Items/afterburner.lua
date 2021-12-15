@@ -19,3 +19,10 @@ item:setLog{
 	date = "12/29/2056",
 	priority = "&r&High Priority/Volatile&!&"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "Add 2 charges of your third skill. Reduce third skill cooldown.", "+2 charges, further reduces cooldown.")
+  end
+end)

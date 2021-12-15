@@ -20,12 +20,8 @@ local SyncChest = net.Packet.new("Sync Category Chest", function(player, x, y, i
   end
 end)
 
-
 local openSnd = Sound.find("Chest1", "vanilla")
 local command = Artifact.find("Command", "vanilla")
-
-
---local MapObject = require("Libraries.mapObjectLib")
 
 local damage = itemPools.damage
 damage.ignoreLocks = false
@@ -73,25 +69,27 @@ damage:add(Item.find("Tesla Coil", "vanilla"))
 damage:add(Item.find("The Hit List", "vanilla"))
 damage:add(Item.find("The Ol' Lopper", "vanilla"))
 -- Starstorm
-if modloader.checkMod("Starstorm") then
-  damage:add(Item.find("Detritive Trematode", "Starstorm"))
-  damage:add(Item.find("Armed Backpack", "Starstorm"))
-  damage:add(Item.find("Brass Knuckles", "Starstorm"))
-  damage:add(Item.find("Fork", "Starstorm"))
-  damage:add(Item.find("Malice", "Starstorm"))
-  damage:add(Item.find("Needles", "Starstorm"))
-  damage:add(Item.find("Strange Can", "Starstorm"))
-  damage:add(Item.find("Poisonous Gland", "Starstorm"))
-  damage:add(Item.find("Hunter's Sigil", "Starstorm"))
-  damage:add(Item.find("Cryptic Source", "Starstorm"))
-  damage:add(Item.find("Man-o'-war", "Starstorm"))
-  damage:add(Item.find("Green Chocolate", "Starstorm"))
-  damage:add(Item.find("Erratic Gadget", "Starstorm"))
-  damage:add(Item.find("Bane Flask", "Starstorm"))
-  damage:add(Item.find("Galvanic Core", "Starstorm"))
-  damage:add(Item.find("Insecticide", "Starstorm"))
-  damage:add(Item.find("Juddering Egg", "Starstorm"))
-end
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    damage:add(Item.find("Detritive Trematode", "Starstorm"))
+    damage:add(Item.find("Armed Backpack", "Starstorm"))
+    damage:add(Item.find("Brass Knuckles", "Starstorm"))
+    damage:add(Item.find("Fork", "Starstorm"))
+    damage:add(Item.find("Malice", "Starstorm"))
+    damage:add(Item.find("Needles", "Starstorm"))
+    damage:add(Item.find("Strange Can", "Starstorm"))
+    damage:add(Item.find("Poisonous Gland", "Starstorm"))
+    damage:add(Item.find("Hunter's Sigil", "Starstorm"))
+    damage:add(Item.find("Cryptic Source", "Starstorm"))
+    damage:add(Item.find("Man-o'-war", "Starstorm"))
+    damage:add(Item.find("Green Chocolate", "Starstorm"))
+    damage:add(Item.find("Erratic Gadget", "Starstorm"))
+    damage:add(Item.find("Bane Flask", "Starstorm"))
+    damage:add(Item.find("Galvanic Core", "Starstorm"))
+    damage:add(Item.find("Insecticide", "Starstorm"))
+    damage:add(Item.find("Juddering Egg", "Starstorm"))
+  end
+end)
 
 local specialtyDamage = MapObject.new({
   name = "Category Chest - Damage",
@@ -102,7 +100,7 @@ local specialtyDamage = MapObject.new({
   affectedByDirector = true,
   affectPurchases = true,
   mask = sprites.mask,
-  useText = "&w&Press &y&'A'&w& to purchase Category Chest - Damage&y&($&$&)&!&",
+  useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to purchase Damage Chest&!&&y&($&$&)&!&",
   activeText = "&y& $&$& &!&",
   maxUses = 1,
   triggerFireworks = true
@@ -128,12 +126,14 @@ healing:add(Item.find("Leeching Seed", "vanilla"))
 healing:add(Item.find("Interstellar Desk Plant", "vanilla"))
 healing:add(Item.find("Repulsion Armor", "vanilla"))
 -- Starstorm
-if modloader.checkMod("Starstorm") then
-  healing:add(Item.find("Dormant Fungus", "Starstorm"))
-  healing:add(Item.find("Distinctive Stick", "Starstorm"))
-  healing:add(Item.find("Wonder Herbs", "Starstorm"))
-  healing:add(Item.find("Gold Medal", "Starstorm"))
-end
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    healing:add(Item.find("Dormant Fungus", "Starstorm"))
+    healing:add(Item.find("Distinctive Stick", "Starstorm"))
+    healing:add(Item.find("Wonder Herbs", "Starstorm"))
+    healing:add(Item.find("Gold Medal", "Starstorm"))
+  end
+end)
 
 local specialtyHealing = MapObject.new({
   name = "Category Chest - Healing",
@@ -144,7 +144,7 @@ local specialtyHealing = MapObject.new({
   affectedByDirector = true,
   affectPurchases = true,
   mask = sprites.mask,
-  useText = "&w&Press &y&'A'&w& to purchase Category Chest - Healing&y&($&$&)&!&",
+  useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to purchase Healing Chest&!&&y&($&$&)&!&",
   activeText = "&y& $&$& &!&",
   maxUses = 1,
   triggerFireworks = true
@@ -186,30 +186,32 @@ util:add(Item.find("Rapid Mitosis", "vanilla"))
 util:add(Item.find("Thallium", "vanilla"))
 util:add(Item.find("Wicked Ring", "vanilla"))
 -- Starstorm
-if modloader.checkMod("Starstorm") then
-  util:add(Item.find("Diary", "Starstorm"))
-  util:add(Item.find("Ice Tool", "Starstorm"))
-  util:add(Item.find("Molten Coin", "Starstorm"))
-  util:add(Item.find("Coffee Bag", "Starstorm"))
-  util:add(Item.find("Guarding Amulet", "Starstorm"))
-  util:add(Item.find("X-4 Stimulant", "Starstorm"))
-  util:add(Item.find("Broken Blood Tester", "Starstorm"))
-  util:add(Item.find("Balloon", "Starstorm"))
-  util:add(Item.find("Prototype Jet Boots", "Starstorm"))
-  util:add(Item.find("Roulette", "Starstorm"))
-  util:add(Item.find("Crowning Valiance", "Starstorm"))
-  util:add(Item.find("Metachronic Trinket", "Starstorm"))
-  util:add(Item.find("Hottest Sauce", "Starstorm"))
-  util:add(Item.find("Low Quality Speakers", "Starstorm"))
-  util:add(Item.find("Field Accelerator", "Starstorm"))
-  util:add(Item.find("Vaccine", "Starstorm"))
-  util:add(Item.find("Nkota's Heritage", "Starstorm"))
-  util:add(Item.find("Droid Head", "Starstorm"))
-  util:add(Item.find("Baby's Toys", "Starstorm"))
-  util:add(Item.find("Composite Injector", "Starstorm"))
-  util:add(Item.find("Swift Skateboard", "Starstorm"))
-  util:add(Item.find("Portable Reactor", "Starstorm"))
-end
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    util:add(Item.find("Diary", "Starstorm"))
+    util:add(Item.find("Ice Tool", "Starstorm"))
+    util:add(Item.find("Molten Coin", "Starstorm"))
+    util:add(Item.find("Coffee Bag", "Starstorm"))
+    util:add(Item.find("Guarding Amulet", "Starstorm"))
+    util:add(Item.find("X-4 Stimulant", "Starstorm"))
+    util:add(Item.find("Broken Blood Tester", "Starstorm"))
+    util:add(Item.find("Balloon", "Starstorm"))
+    util:add(Item.find("Prototype Jet Boots", "Starstorm"))
+    util:add(Item.find("Roulette", "Starstorm"))
+    util:add(Item.find("Crowning Valiance", "Starstorm"))
+    util:add(Item.find("Metachronic Trinket", "Starstorm"))
+    util:add(Item.find("Hottest Sauce", "Starstorm"))
+    util:add(Item.find("Low Quality Speakers", "Starstorm"))
+    util:add(Item.find("Field Accelerator", "Starstorm"))
+    util:add(Item.find("Vaccine", "Starstorm"))
+    util:add(Item.find("Nkota's Heritage", "Starstorm"))
+    util:add(Item.find("Droid Head", "Starstorm"))
+    util:add(Item.find("Baby's Toys", "Starstorm"))
+    util:add(Item.find("Composite Injector", "Starstorm"))
+    util:add(Item.find("Swift Skateboard", "Starstorm"))
+    util:add(Item.find("Portable Reactor", "Starstorm"))
+  end
+end)
 
 local specialtyUtil = MapObject.new({
   name = "Category Chest - Utility",
@@ -220,12 +222,12 @@ local specialtyUtil = MapObject.new({
   affectedByDirector = true,
   affectPurchases = true,
   mask = sprites.mask,
-  useText = "&w&Press &y&'A'&w& to purchase Category Chest - Utility&y&($&$&)&!&",
+  useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to purchase Utility Chest&!&&y&($&$&)&!&",
   activeText = "&y& $&$& &!&",
   maxUses = 1,
   triggerFireworks = true
 })
------------------------------------
+
 for _, pool in ipairs(itemPools) do
   for _, item in ipairs(pool:toList()) do
     local weight = 1
@@ -254,15 +256,11 @@ callback.register("onObjectActivated", function(objectInstance, frame, player, x
       elseif objectInstance:getObject() == specialtyUtil then
         pool = util
       end
-      if Artifact.find("Command") and Artifact.find("Command").active then
-        local crate = pool:getCrate():create(objectInstance.x, objectInstance.y)
-      else
-        if net.host then
-          local item = pool:roll()
-          item:create(objectInstance.x, objectInstance.y - (2*objectInstance.sprite.height))
-          if net.online then
-            SyncChest:sendAsHost("all", nil, objectInstance.x, objectInstance.y - (2*objectInstance.sprite.height), item:getObject():getName())
-          end
+      if net.host then
+        local item = pool:roll()
+        item:create(objectInstance.x, objectInstance.y - (2*objectInstance.sprite.height))
+        if net.online then
+          SyncChest:sendAsHost("all", nil, objectInstance.x, objectInstance.y - (2*objectInstance.sprite.height), item:getObject():getName())
         end
       end
     end
@@ -274,19 +272,24 @@ callback.register("onObjectFailure", function(objectInstance, player)
   end
 end)
 
-----------------------------------------
-
 local damageCard = Interactable.new(specialtyDamage, "specialtyDamage")
-damageCard.spawnCost = 1
+damageCard.spawnCost = 65
 
 local healingCard = Interactable.new(specialtyHealing, "specialtyHealing")
-healingCard.spawnCost = 1
+healingCard.spawnCost = 65
 
 local utilCard = Interactable.new(specialtyUtil, "specialtyUtil")
-utilCard.spawnCost = 1
+utilCard.spawnCost = 65
 
 for _, stage in ipairs(Stage.findAll("vanilla")) do
   stage.interactables:add(damageCard)
   stage.interactables:add(healingCard)
   stage.interactables:add(utilCard)
+end
+if modloader.checkMod("Starstorm") then
+  for _, ss_stage in ipairs(Stage.findAll("Starstorm")) do
+    ss_stage.interactables:add(damageCard)
+    ss_stage.interactables:add(healingCard)
+    ss_stage.interactables:add(utilCard)
+  end
 end

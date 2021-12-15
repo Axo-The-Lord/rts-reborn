@@ -2,7 +2,7 @@
 
 local vignette = Object.new("Vignette")
 
-local sprite = Sprite.load("Vignette", "Misc/resources/vignette.png", 1, 0, 0)
+local sprite = Sprite.load("Vignette", "Graphics/vignette.png", 1, 0, 0)
 
 local DrawVignette = function(obj)
   local w, h = graphics.getHUDResolution()
@@ -40,17 +40,4 @@ end)
 vignette:addCallback("create", function(self)
   local data = self:getData()
   data.rate = 0.01
-end)
-
-callback.register("onPlayerHUDDraw", function(player)
-  local hpDiff = player:get("lastHp") - player:get("hp")
-  if player:get("lastHp") > player:get("hp") then
-    local v = vignette:find(misc.hud:get("vignette"))
-    print("a")
-    if v then
-      print("e")
-      v.blendColor = Color.fromRGB(100, 10, 10)
-      v.alpha = (player:get("hp") / player:get("maxhp"))
-    end
-  end
 end)

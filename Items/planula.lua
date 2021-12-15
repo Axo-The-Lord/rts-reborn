@@ -3,9 +3,11 @@
 local item = Item("Planula")
 item.pickupText = "Receive flat healing when attacked."
 item.sprite = Sprite.load("Items/resources/planula.png", 1, 12, 15)
---[[ if modloader.checkMod("Starstorm") then
-  ItemPool.find("legendary", "Starstorm"):add(item)
-end ]]--
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    ItemPool.find("Legendary", "Starstorm"):add(item)
+  end
+end)
 
 callback.register("onDamage", function(hit)
   if isa(hit, "PlayerInstance") then
@@ -28,3 +30,10 @@ item:setLog{
 	date = "Some Date", -- Add date!
 	priority = "&b&Field-Found&!&"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "Heal for 15 health instantly when hit.", "+15 health.")
+  end
+end)

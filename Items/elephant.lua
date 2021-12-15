@@ -23,7 +23,8 @@ end)
 
 -- Use
 item:addCallback("use", function(player, embryo)
-	sound:play(0.9 + math.random() * 0.2, 0.7)
+	sound:play(0.9 + math.random() * 0.2, 1)
+	misc.shakeScreen(60)
 	if embryo then
 		player:applyBuff(armorBuff, 7.5 * 60)
 	else

@@ -11,7 +11,7 @@ local useBarrel = MapObject.new({
   costIncrease = 0,
   mask = Sprite.load("MapObjects/resources/barrelMask.png", 1, 3, 13),
   activeText = "&y& $&$& &!&", -- Nonsense, I know
-  useText = "&w&Press&!& &y&'A'&!& &w&to open Equipment Barrel&!&&y&($&$&)&!&",
+  useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to open Equipment Barrel&!&&y&($&$&)&!&",
   maxUses = 1,
   triggerFireworks = true
 })
@@ -36,7 +36,6 @@ callback.register("onObjectActivated", function(objectInstance, frame, player, x
     end
   end
 end)
-
 callback.register("onObjectFailure", function(objectInstance, player)
   if objectInstance:getObject() == useBarrel then
     Sound.find("Error", "vanilla"):play(1)
@@ -44,7 +43,7 @@ callback.register("onObjectFailure", function(objectInstance, player)
 end)
 
 local barrelCard = Interactable.new(useBarrel, "useBarrel")
-barrelCard.spawnCost = 1
+barrelCard.spawnCost = 40
 for _, stage in ipairs(Stage.findAll("vanilla")) do
   stage.interactables:add(barrelCard)
 end

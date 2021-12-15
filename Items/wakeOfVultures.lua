@@ -104,3 +104,10 @@ item:setLog{
 	date = "10/23/2056",
 	priority = "&r&High Priority/Biological&!&"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "Gain the power of slained elites for 8 seconds.", "+5 second duration.")
+  end
+end)

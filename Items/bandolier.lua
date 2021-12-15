@@ -64,3 +64,10 @@ item:setLog{
 	date = "04/19/2056",
 	priority = "&g&Standard&!&"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "18% chance to drop an ammo pack on kill.", "+10% chance.")
+  end
+end)

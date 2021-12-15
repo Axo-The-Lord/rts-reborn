@@ -1,4 +1,5 @@
 -- Spinel Tonic
+-- This was a nightmare
 
 local item = Item("Spinel Tonic")
 item.pickupText = "Gain a massive boost to ALL stats. Chance to gain an affliction that reduces ALL stats."
@@ -16,16 +17,21 @@ affliction.sprite = Sprite.load("Items/resources/tonicAffliction.png", 1, 11, 13
 affliction.color = Color.BLACK
 
 affliction:addCallback("pickup", function(player)
-  local playerAc = player:getAccessor() -- Thanks Marks!!
-  local afflictionStack = player:countItem(affliction)
-  local afflictionBonus = 1 - 0.95 ^ afflictionStack
-  player:getData().afflictionMod = -- ???
-  playerAc.damage = playerAc.damage - (playerAc.damage * afflictionBonus)
-  playerAc.attack_speed = playerAc.attack_speed - (playerAc.attack_speed * afflictionBonus)
-  playerAc.armor = playerAc.armor - (playerAc.armor * afflictionBonus)
-  playerAc.percent_hp = playerAc.percent_hp - (playerAc.percent_hp * (1 - 1 / (1 + 0.1 * afflictionStack)))
-  playerAc.hp_regen = playerAc.hp_regen - (playerAc.hp_regen * afflictionBonus)
-  playerAc.pHmax = playerAc.pHmax - (playerAc.pHmax * afflictionBonus)
+  local playerAc = player:getAccessor()
+  local playerData = player:getData()
+  local afflictionBonus = 1 - 0.95 ^ player:countItem(affliction)
+  playerData.affliction_damage = playerAc.damage * afflictionBonus
+  playerAc.damage = playerAc.damage - playerData.affliction_damage
+  playerData.affliction_attack_speed = playerAc.attack_speed * afflictionBonus
+  playerAc.attack_speed = playerAc.attack_speed - playerData.affliction_attack_speed
+  playerData.affliction_armor = playerAc.armor * afflictionBonus
+  playerAc.armor = playerAc.armor - playerData.affliction_armor
+  playerData.affliction_hp = playerAc.percent_hp * (1 - 1 / (1 + 0.1 * player:countItem(affliction)))
+  playerAc.percent_hp = playerAc.percent_hp - playerData.affliction_hp
+  playerData.affliction_regen = playerAc.hp_regen * afflictionBonus
+  playerAc.hp_regen = playerAc.hp_regen - playerData.affliction_regen
+  playerData.affliction_pHmax = playerAc.pHmax * afflictionBonus
+  playerAc.pHmax = playerAc.pHmax - playerData.affliction_pHmax
 end)
 
 -- Buff
@@ -34,19 +40,47 @@ tonicBuff.sprite = Sprite.load("Items/resources/tonicBuff.png", 1, 4, 6)
 
 tonicBuff:addCallback("start", function(player)
   local playerAc = player:getAccessor()
-  local afflictionStack = player:countItem(affliction)
-  local afflictionBonus = player:getData().afflictionMod
-  playerAc.damage = (playerAc.damage + (playerAc.damage * afflictionBonus)) * 2
-  playerAc.attack_speed = (playerAc.attack_speed + (playerAc.attack_speed * afflictionBonus)) * 1.7
-  playerAc.armor = (playerAc.armor + (playerAc.armor * afflictionBonus)) + 20
-  playerAc.percent_hp = (playerAc.percent_hp + (playerAc.percent_hp * (1 - 1 / (1 + 0.1 * afflictionStack)))) + 0.5
-  playerAc.hp_regen = (playerAc.hp_regen + (playerAc.hp_regen * afflictionBonus)) * 3
-  playerAc.pHmax = (playerAc.pHmax + (playerAc.pHmax * afflictionBonus)) * 1.3
+  local playerData = player:getData()
+  -- Remove the afflictions
+  playerAc.damage = playerAc.damage + (playerData.affliction_damage or 0)
+  playerAc.attack_speed = playerAc.attack_speed + (playerData.affliction_attack_speed or 0)
+  playerAc.armor = playerAc.armor + (playerData.affliction_armor or 0)
+  playerAc.percent_hp = playerAc.percent_hp + (playerData.affliction_hp or 0)
+  playerAc.hp_regen = playerAc.hp_regen + (playerData.affliction_regen or 0)
+  playerAc.pHmax = playerAc.pHmax + (playerData.affliction_pHmax or 0)
+  -- Tonic modifiers
+  playerData.tonic_damage = playerAc.damage
+  playerData.tonic_attack_speed = playerAc.attack_speed * 0.7
+  playerData.tonic_armor = 20
+  playerData.tonic_hp = 0.5
+  playerData.tonic_regen = playerAc.hp_regen * 2
+  playerData.tonic_pHmax = playerAc.pHmax * 0.3
+  -- Add modifier to stat
+  playerAc.damage = playerAc.damage + playerData.tonic_damage
+  playerAc.attack_speed = playerAc.attack_speed + playerData.tonic_attack_speed
+  playerAc.armor = playerAc.armor + playerData.tonic_armor
+  playerAc.percent_hp = playerAc.percent_hp + playerData.tonic_hp
+  playerAc.hp_regen = playerAc.hp_regen + playerData.tonic_regen
+  playerAc.pHmax = playerAc.pHmax + playerData.tonic_pHmax
 end)
 tonicBuff:addCallback("end", function(player)
   local playerAc = player:getAccessor()
-  local afflictionStack = player:countItem(affliction)
-  -- write removals here
+  local playerData = player:getData()
+  -- Remove the modifier
+  playerAc.damage = playerAc.damage - playerData.tonic_damage
+  playerAc.attack_speed = playerAc.attack_speed - playerData.tonic_attack_speed
+  playerAc.armor = playerAc.armor - playerData.tonic_armor
+  playerAc.percent_hp = playerAc.percent_hp - playerData.tonic_hp
+  playerAc.hp_regen = playerAc.hp_regen - playerData.tonic_regen
+  playerAc.pHmax = playerAc.pHmax - playerData.tonic_pHmax
+  -- Add back the afflictions
+  playerAc.damage = playerAc.damage - (playerData.affliction_damage or 0)
+  playerAc.attack_speed = playerAc.attack_speed - (playerData.affliction_attack_speed or 0)
+  playerAc.armor = playerAc.armor - (playerData.affliction_armor or 0)
+  playerAc.percent_hp = playerAc.percent_hp - (playerData.affliction_hp or 0)
+  playerAc.hp_regen = playerAc.hp_regen - (playerData.affliction_regen or 0)
+  playerAc.pHmax = playerAc.pHmax - (playerData.affliction_pHmax or 0)
+  -- Give afflictions
   if math.chance(20) then
     player:giveItem(affliction)
     local afflictionDisplay = affliction:create(player.x + (player:get("pHspeed") * player.xscale), player.y + player:get("pVspeed"))

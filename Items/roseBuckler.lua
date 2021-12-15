@@ -2,36 +2,38 @@
 
 local item = Item("Rose Buckler")
 item.pickupText = "Reduce incoming damage after moving for some time."
-item.sprite = Sprite.load("Items/resources/roseBuckler.png", 1, 16, 16) -- 11, 12 (I DIDN'T CHANGE THE CANVAS SIZE AAAAAA)
+item.sprite = Sprite.load("Items/resources/roseBuckler.png", 1, 11, 12)
 item:setTier("uncommon")
 
-local armorBuff = Buff.new("shield2")
+local armorBuff = Buff.new("Rose Buckler")
 local sound = Sound.find("Crit", "vanilla")
 armorBuff.sprite = Sprite.find("Buffs", "vanilla")
 armorBuff.subimage = 9
 armorBuff.frameSpeed = 0
 
 armorBuff:addCallback("start", function(player)
+  player:getData().buckler_bonus = 30 * player:countItem(item)
   sound:play(0.6, 1)
-  player:set("armor", player:get("armor") + (30 * player:countItem(item)))
+  player:set("armor", player:get("armor") + player:getData().buckler_bonus)
 end)
 armorBuff:addCallback("end", function(player)
-  player:set("armor", player:get("armor") - (30 * player:countItem(item)))
+  player:set("armor", player:get("armor") - player:getData().buckler_bonus)
 end)
 
 -- A timer
 callback.register("onPlayerInit", function(player)
-  player:set("bucklerTimer", 0)
+  player:getData().buckler_timer = 0
 end)
 
 callback.register("onPlayerStep", function(player)
+  local playerData = player:getData()
   if player:countItem(item) > 0 then
     if (player:get("moveLeft") == 1 or player:get("moveRight") == 1) and math.abs(player:get("pHspeed")) > 0 then
-      player:set("bucklerTimer", player:get("bucklerTimer") + 1)
+      playerData.buckler_timer = playerData.buckler_timer + 1
     else
-      player:set("bucklerTimer", 0)
+      playerData.buckler_timer = 0
     end
-    if player:get("bucklerTimer") >= 90 then
+    if playerData.buckler_timer >= 90 then
       player:applyBuff(armorBuff, 5)
     end
   end
@@ -46,3 +48,10 @@ item:setLog{
 	date = "05/22/2056",
 	priority = "&g&Priority&!&"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "Increase armor by 30 after moving for 1.5 seconds.", "+30 armor.")
+  end
+end)

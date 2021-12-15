@@ -18,3 +18,10 @@ item:setLog{
 	date = "10/05/2056",
 	priority = "Priority"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "Add 1 charge to your second skill.", "+1 charge.")
+  end
+end)

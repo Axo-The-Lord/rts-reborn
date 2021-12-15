@@ -17,8 +17,22 @@ local debuffs = {
   Buff.find("sunder3", "vanilla"),
   Buff.find("sunder4", "vanilla"),
   Buff.find("sunder5", "vanilla"),
-  Buff.find("oil", "vanilla")
+  Buff.find("oil", "vanilla"),
+  Buff.find("Grieving", "rts-reborn")
 }
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    table.insert(debuffs, Buff.find("disease", "Starstorm"))
+    table.insert(debuffs, Buff.find("intoxication", "Starstorm"))
+    table.insert(debuffs, Buff.find("daze", "Starstorm"))
+    table.insert(debuffs, Buff.find("voided", "Starstorm"))
+    table.insert(debuffs, Buff.find("nbanditPull", "Starstorm"))
+    table.insert(debuffs, Buff.find("needles", "Starstorm"))
+    table.insert(debuffs, Buff.find("weaken1", "Starstorm"))
+    table.insert(debuffs, Buff.find("weaken2", "Starstorm"))
+    table.insert(debuffs, Buff.find("noteam", "Starstorm"))
+  end
+end)
 
 local deathmark = Buff.new("Death Mark")
 deathmark.sprite = Sprite.load("Items/resources/deathMarkBuff.png", 1, 9, 6)
@@ -30,13 +44,13 @@ callback.register("onHit", function(damager, hit)
     if enemyBuffs then
       local debuffCount = 0
       for _, buff in ipairs(enemyBuffs) do
-        if table.contains(buff, debuffs) then
+        if contains(debuffs, buff) then
           debuffCount = debuffCount + 1
         end
       end
       print(debuffCount)
       if debuffCount >= 4 then
-        hit:applyBuff(deathmark, 60 * (7 + (7 * parent:countItem(item))))
+        hit:applyBuff(deathmark, 60 * (7 * parent:countItem(item)))
       end
     end
   end
@@ -49,15 +63,6 @@ callback.register("preHit", function(damager, hit)
   end
 end)
 
-function table.contains(v, t)
-  for i, v in ipairs(t) do
-    if t[i] == v then
-      return i
-    end
-  end
-  return false
-end
-
 -- Item Log
 item:setLog{
   group = "uncommon",
@@ -67,3 +72,10 @@ item:setLog{
   date = "02/22/2056",
   priority = "&g&High Priority&!&"
 }
+
+-- Tab Menu
+callback.register("postLoad", function()
+  if modloader.checkMod("Starstorm") then
+    TabMenu.setItemInfo(item, nil, "Enemies with 4 or more debuffs take 50% more damage for 7 seconds.", "+7 second duration.")
+  end
+end)

@@ -7,12 +7,12 @@ LunarColor = Color.fromHex(0x808EE1)
 -- Lunar Coins
 local coinUI
 if modloader.checkMod("Starstorm") then
-  coinUI = Sprite.load("Core/resources/coinUI_2.png", 1, 2, 11)
+  coinUI = Sprite.load("Graphics/UI/coinUI_2.png", 1, 2, 11)
 else
-  coinUI = Sprite.load("Core/resources/coinUI.png", 1, 2, 11)
+  coinUI = Sprite.load("Graphics/UI/coinUI.png", 1, 2, 11)
 end
 local LunarCoinDropChance = 1 -- Percent chance of dropping a Lunar Coin on-kill.
-local dropSound = Sound.load("Core/resources/coinDrop.ogg")
+local dropSound = Sound.load("Items/resources/coinDrop.ogg")
 
 -- Load Lunar Coins on Game Start
 callback.register("onGameStart", function()
@@ -29,17 +29,11 @@ callback.register("onStep", function()
   end
 end, 10000)
 
--- Debug Printing
-local debugSet = modloader.checkFlag("rts_lunar_debug")
-function debugPrint(...)
-  if debugSet then print(...) end
-end
-
 -- Define Lunar Item Pool
 local lunar = ItemPool.new("lunar")
 lunar.ignoreEnigma = false
 local lunarCrate = lunar:getCrate()
-lunarCrate.sprite = Sprite.load("Core/resources/lunarCrate.png", 1, 8, 9)
+lunarCrate.sprite = Sprite.load("Graphics/lunarCrate.png", 1, 8, 9)
 
 -- API Functions
 local lunar_items = {}
@@ -130,7 +124,7 @@ end)
 callback.register("onNPCDeath", function(actorInstance)
   if net.host then
     if math.chance(LunarCoinDropChance) then
-      dropSound:play(1, 1.5)
+      dropSound:play(1, 1)
       lunarCoin:create(actorInstance.x, actorInstance.y)
       if net.online then
         local x = actorInstance.x
@@ -185,6 +179,14 @@ callback.register("onStep", function()
     end
   end
 end)
+callback.register("onDraw", function()
+  for _, inst in ipairs(itemPO:findMatching("lunar", 1)) do
+    if touching[inst] then
+      graphics.color(Color.WHITE)
+      graphics.printColor("Press &y&'"..input.getControlString("enter").."'&!& to pick up.", math.floor(inst.x + 0.5 - 56), math.floor(inst.y + 0.5) + 40)
+    end
+  end
+end)
 
 -- Glowing Meteorite
 if not modloader.checkFlag("rts_classic_meteorite") then
@@ -194,12 +196,12 @@ if not modloader.checkFlag("rts_classic_meteorite") then
   useItems:remove(meteorite)
   meteorite.color = LunarColor
   meteorite:setLog{
-	 group = "end",
+    group = "end",
     story = "What a... peculiar piece of the stars that serendipity has brought us. I\'m sure you can make more. The ratios are simple. It should be quite fun.",
     destination = "Some Place", -- Add Destination!
     date = "Some Date", -- Add Date!
     priority = "&b&Unaccounted For&!&"
-  }
+   }
   Lunar.addItem(meteorite)
 end
 
