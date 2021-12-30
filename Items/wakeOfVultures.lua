@@ -106,8 +106,6 @@ item:setLog{
 }
 
 -- Tab Menu
-callback.register("postLoad", function()
-  if modloader.checkMod("Starstorm") then
-    TabMenu.setItemInfo(item, nil, "Gain the power of slained elites for 8 seconds.", "+5 second duration.")
-  end
-end)
+if modloader.checkMod("Starstorm") then
+  TabMenu.setItemInfo(item, nil, "Gain the power of slained elites for 8 seconds.", "+5 second duration.")
+end

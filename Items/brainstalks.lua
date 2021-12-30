@@ -49,11 +49,9 @@ item:setLog{
 }
 
 -- Tab Menu
-callback.register("postLoad", function()
-  if modloader.checkMod("Starstorm") then
-    TabMenu.setItemInfo(item, nil, "Skills have no cooldowns for 4 seconds after killing an elite.", "+4 seconds.")
-  end
-end)
+if modloader.checkMod("Starstorm") then
+  TabMenu.setItemInfo(item, nil, "Skills have no cooldowns for 4 seconds after killing an elite.", "+4 seconds.")
+end
 
 -- Achievement
 local unlock = Achievement.new("Deicide")

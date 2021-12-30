@@ -12,6 +12,7 @@ armorBuff.subimage = 9
 armorBuff.frameSpeed = 0
 
 armorBuff:addCallback("start", function(player)
+  Object.find("EfOutline", "vanilla"):create(0, 0):set("persistent", 1):set("parent", player.id):set("rate", 0.025).blendColor = Color.fromHex(0xC7C1AF)
   player:getData().buckler_bonus = 30 * player:countItem(item)
   sound:play(0.6, 1)
   player:set("armor", player:get("armor") + player:getData().buckler_bonus)
@@ -34,7 +35,7 @@ callback.register("onPlayerStep", function(player)
       playerData.buckler_timer = 0
     end
     if playerData.buckler_timer >= 90 then
-      player:applyBuff(armorBuff, 5)
+      player:applyBuff(armorBuff, 60)
     end
   end
 end)
@@ -50,8 +51,6 @@ item:setLog{
 }
 
 -- Tab Menu
-callback.register("postLoad", function()
-  if modloader.checkMod("Starstorm") then
-    TabMenu.setItemInfo(item, nil, "Increase armor by 30 after moving for 1.5 seconds.", "+30 armor.")
-  end
-end)
+if modloader.checkMod("Starstorm") then
+  TabMenu.setItemInfo(item, nil, "Increase armor by 30 after moving for 1.5 seconds.", "+30 armor.")
+end

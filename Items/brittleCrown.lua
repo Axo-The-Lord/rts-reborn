@@ -56,8 +56,6 @@ item:setLog{
 }
 
 -- Tab Menu
-callback.register("postLoad", function()
-  if modloader.checkMod("Starstorm") then
-    TabMenu.setItemInfo(item, nil, "30% chance to gain 2 gold on hit, but lose gold when you are hit.", "+2 gold gain, +100% gold loss.")
-  end
-end)
+if modloader.checkMod("Starstorm") then
+  TabMenu.setItemInfo(item, nil, "30% chance to gain 2 gold on hit, but lose gold when you are hit.", "+2 gold gain, +100% gold loss.")
+end

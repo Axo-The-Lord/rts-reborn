@@ -30,8 +30,6 @@ item:setLog{
 }
 
 -- Tab Menu
-callback.register("postLoad", function()
-  if modloader.checkMod("Starstorm") then
-    TabMenu.setItemInfo(item, nil, "Deal 20% extra damage to bosses.", "+20% damage.")
-  end
-end)
+if modloader.checkMod("Starstorm") then
+  TabMenu.setItemInfo(item, nil, "Deal 20% extra damage to bosses.", "+20% damage.")
+end

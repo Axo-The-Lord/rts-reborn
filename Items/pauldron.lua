@@ -76,8 +76,6 @@ item:setLog{
 }
 
 -- Tab Menu
-callback.register("postLoad", function()
-  if modloader.checkMod("Starstorm") then
-    TabMenu.setItemInfo(item, nil, "Killing 3 enemies within 1 second incrases movement and attack speed for 6 seconds.", "+4 seconds.")
-  end
-end)
+if modloader.checkMod("Starstorm") then
+  TabMenu.setItemInfo(item, nil, "Killing 3 enemies within 1 second incrases movement and attack speed for 6 seconds.", "+4 seconds.")
+end

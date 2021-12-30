@@ -17,7 +17,7 @@ local baseSprites = {
   shoot3 = Sprite.load("arti_shoot3", path.."shoot3.png", 8, 8, 8),
   shoot4_1 = Sprite.load("arti_shoot4", path.."shoot4_1.png", 2, 3, 6),
   shoot4_2 = Sprite.load("arti_shoot4_2", path.."shoot4_2.png", 2, 5, 6),
-  shoot4_3 = Sprite.load("srti_shoot4_3", path.."shoot4_3.png", 2, 3, 6)
+  shoot4_3 = Sprite.load("arti_shoot4_3", path.."shoot4_3.png", 2, 3, 6)
 }
 
 local sprSkills = Sprite.load("arti_skills", path.."skills.png", 4, 0, 0)
@@ -64,7 +64,7 @@ end)
 arti:addCallback("init", function(player)
   Ability.addCharge(player, "z", 3) -- 4 flame bolts
   player:setAnimations(baseSprites)
-  player:survivorSetInitialStats(110, 12, 0.167)
+  player:survivorSetInitialStats(110, 12, 0.017)
   player:setSkill(1,
     "Flame Bolt",
     "Fire a bolt for 220% damage that ignites enemies. Hold up to 4.",
@@ -109,7 +109,7 @@ arti:addCallback("useSkill", function(player, skill)
 			player:survivorActivityState(3, player:getAnimation("shoot3"), 0.25, true, true)
 		elseif skill == 4 then
       player:getData().flamethrowerDirection = player:getFacingDirection()
-      player:getData().flamethrowerLoops = 23
+      player:getData().flamethrowerLoops = 100
       sndShoot4_start:play(0.8 + math.random() * 0.2)
       if player:get("moveLeft") + player:get("moveRight") > 0 then
         player:survivorActivityState(4, player:getAnimation("shoot4_2"), 0.25, false, true)
@@ -291,7 +291,6 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
     elseif playerAc.moveLeft == 1 then
       playerAc.pHspeed = -playerAc.pHmax
     end
-
     if relevantFrame == 2 then
       sndShoot1:play(0.8 + math.random() * 0.2, 1)
       local newFlameBolt = objFlameBolt:create(player.x, player.y)
@@ -304,10 +303,16 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
       end
     end
   elseif skill == 4 then
+    local playerAc = player:getAccessor() -- "Agile"
+    playerAc.pHspeed = math.approach(playerAc.pHspeed, 0, 0.025)
+    if playerAc.moveRight == 1 then
+      playerAc.pHspeed = playerAc.pHmax
+    elseif playerAc.moveLeft == 1 then
+      playerAc.pHspeed = -playerAc.pHmax
+    end
     for i = 0, player:get("sp") do
-      specialFire:direction(player:getData().flamethrowerDirection, player:getData().flamethrowerDirection, 0, 0)
-      specialFire:burst("above", player.x, player.y, 1)
-      local bullet = player:fireBullet(player.x, player.y - 2, player:getData().flamethrowerDirection, 60, 0.95 * player:get("attack_speed"), nil, DAMAGER_BULLET_PIERCE)
+      -- particle
+      local bullet = player:fireBullet(player.x, player.y - 2, player:getData().flamethrowerDirection, 60, 0.1 * player:get("attack_speed"), nil, DAMAGER_BULLET_PIERCE)
       if math.chance(50) then
         bullet:getData().doIgnite = true
       end
@@ -318,8 +323,8 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
         bullet:set("climb", i * 8)
       end
     end
-    if player.subimage < player.sprite.frames - 1 and player:getData().flamethrowerLoops == 0 then
-      player.subimage = player.sprite.frames - 1
+    if player.subimage > player.sprite.frames - 1 and player:getData().flamethrowerLoops ~= 0 then
+      player.subimage = 1
       player:getData().flamethrowerLoops = player:getData().flamethrowerLoops - 1
     end
   end -- elseif

@@ -25,8 +25,6 @@ item:setLog{
 }
 
 -- Tab Menu
-callback.register("postLoad", function()
-  if modloader.checkMod("Starstorm") then
-    TabMenu.setItemInfo(item, 1075, "Double base damage, halve maximum health.", "+100% base damage, -50% maximum health.")
-  end
-end)
+if modloader.checkMod("Starstorm") then
+  TabMenu.setItemInfo(item, 1075, "Double base damage, halve maximum health.", "+100% base damage, -50% maximum health.")
+end

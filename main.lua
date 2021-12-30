@@ -18,6 +18,7 @@ local Miscellaneous = {
   "text",
   "vignette",
   "title",
+  "contributors"
 }
 for _, misc in ipairs(Miscellaneous) do
   local m = require("Misc."..misc)
@@ -49,18 +50,16 @@ local Items = {
   "warhorn",
   "pauldron",
   "roseBuckler",
-  "fuelCell",
-  -- "bandolier",
   "deathMark",
   -- Rare
   "brainstalks",
   "wakeOfVultures",
   "afterburner",
   -- Boss
-  "planula",
+  -- "planula",
   -- Lunar
   "beads",
-  -- "transcendence",
+  "transcendence",
   "brittleCrown",
   "shapedGlass",
   "spinelTonic",

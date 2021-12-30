@@ -74,8 +74,6 @@ item:setLog{
 }
 
 -- Tab Menu
-callback.register("postLoad", function()
-  if modloader.checkMod("Starstorm") then
-    TabMenu.setItemInfo(item, nil, "Enemies with 4 or more debuffs take 50% more damage for 7 seconds.", "+7 second duration.")
-  end
-end)
+if modloader.checkMod("Starstorm") then
+  TabMenu.setItemInfo(item, nil, "Enemies with 4 or more debuffs take 50% more damage for 7 seconds.", "+7 second duration.")
+end
