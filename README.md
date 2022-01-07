@@ -4,7 +4,7 @@ Hello! This is the official GitHub repository for **RTS Reborn**: A continuation
 
 You can download the development version of the mod here, but more importantly, this is where you can contribute to the mod!
 
-If you push even the smallest changes to this repository, you'll get your name in the credits of the mod, the contributor role on the Discord, and a special particle effect in multiplayer lobbies.
+If you push even the smallest changes to this repository, you'll get your name in the credits of the mod, the contributor role on the Discord (https://discord.gg/aruVgb6NNP), and a special particle effect in multiplayer lobbies.
 
 This Readme is going to act a lot like a To-Do list for those of you who are interested in contributing, to see how close we are to finishing the next update.
 
@@ -13,6 +13,7 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 **abilityCharge**
 * Change the cooldown from 0 to 0.5 seconds to avoid casting all charges in one click
 * Change color of charges to a dimmer color rather than the opposite (I'm not sure how RGB works though)
+* Add the ability to override for characters such as HAN-D or Executioner
 
 **lunar**
 * Properly change UI when Starstorm is enabled
@@ -135,9 +136,18 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 * Flamethrower needs to be reworked
 * Needs Secondary and Utility
 * Stitch fire trail to walk
+* Rewrite the special as it is currently horrible
+* Should the flame bolts be aimed at a 45-degree angle instead of straight down when hovering?
+* Should the hitbox of the flame bolt change at all?
 
 ## STAGES
 
 **Bazaar Between Time**
 * Needs a tileset
 * Basically not started at all
+
+## Other
+
+* Icon needs text
+* Rainfusion Description needs finalizing
+* Remove stupid .DS_Store who uses MacOS anyway amirite

@@ -1,3 +1,5 @@
+-- This is really just a test. Let me know if you think it's a good idea for mod contributors to have a special effect like this in Multiplayer lobbies. If you didn't know already, Starstorm does something similar
+
 local names = {"Axo"}
 
 callback.register("onPlayerInit", function(player)
