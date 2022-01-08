@@ -14,6 +14,8 @@ local baseSprites = {
   decoy = Sprite.load("arti_decoy", path.."decoy.png", 1, 8, 11),
   shoot1_1 = Sprite.load("arti_shoot1", path.."shoot1_1.png", 4, 3, 7),
   shoot1_2 = Sprite.load("arti_shoot1_2", path.."shoot1_2.png", 4, 5, 8),
+  shoot2_charge = Sprite.load("arti_shoot2_charge", path.."shoot2_charge", 8, 4, 7),
+  shoot2_fire = Sprite.load("arti_shoot2_fire", path.."shoot2_fire", 6, 4, 7),
   shoot3 = Sprite.load("arti_shoot3", path.."shoot3.png", 8, 8, 8),
   shoot4_1 = Sprite.load("arti_shoot4", path.."shoot4_1.png", 2, 3, 6),
   shoot4_2 = Sprite.load("arti_shoot4_2", path.."shoot4_2.png", 2, 5, 6),
@@ -103,11 +105,13 @@ arti:addCallback("useSkill", function(player, skill)
       else
         player:survivorActivityState(1, player:getAnimation("shoot1_1"), 0.25, true, true)
       end
-		--[[elseif skill == 2 then
-			player:survivorActivityState(2, sprShoot2, 0.25, true, true)]]--
+		elseif skill == 2 then
+			player:getData().charge = nil
+			player:survivorActivityState(2.1, player:getAnimation("shoot2_charge"), 0.12, true, true)
 		elseif skill == 3 then
 			player:survivorActivityState(3, player:getAnimation("shoot3"), 0.25, true, true)
 		elseif skill == 4 then
+	  player:getData().timer = 0
       player:getData().flamethrowerDirection = player:getFacingDirection()
       player:getData().flamethrowerLoops = 100
       sndShoot4_start:play(0.8 + math.random() * 0.2)
@@ -241,8 +245,25 @@ callback.register("preHit", function(damager, hit)
   if parent and parent:isValid() and hit and hit:isValid() then
     if damager:getData().doIgnite == true then
       hit:getData().igniteParent = parent
-      -- Get ready for it
-      if hit:hasBuff(ignite[1]) then
+	  local hasUp
+	  for i = 1, 7 do 
+		if hit:hasBuff(ignite[i]) then 
+			hit:removeBuff(ignite[i])
+			hit:applyBuff(ignite[i + 1], 4 * 60)
+			hasUp = true
+			break
+		end
+	  end
+	  if not hasUp then 
+		if hit:hasBuff(ignite[8]) then 
+			hit:applyBuff(ignite[8], 4 * 60)
+		else
+			hit:applyBuff(ignite[1], 4 * 60)
+		end
+	  end
+	  
+      -- Get ready for it -- @ no need 
+      --[[if hit:hasBuff(ignite[1]) then
         hit:removeBuff(ignite[1])
         hit:applyBuff(ignite[2], 4 * 60)
       elseif hit:hasBuff(ignite[2]) then
@@ -267,7 +288,7 @@ callback.register("preHit", function(damager, hit)
         if not hit:hasBuff(ignite[8]) then
           hit:applyBuff(ignite[1], 4 * 60)
         end
-      end
+      end]]
     end
   end
 end)
@@ -281,16 +302,138 @@ specialFire:size(0.8, 1.2, 0.01, 0.02)
 specialFire:angle(0, 360, 0.01, 0.02, false)
 specialFire:life(45, 60)
 
+local function angleDif(current, target)
+  return ((((current - target) % 360) + 540) % 360) - 180
+end
+local syncInputRelease = net.Packet.new("SSInputRelease", function(sender, player, key)
+	local playerI = player:resolve()
+	if playerI and playerI:isValid() and key then
+		playerI:getData()._keyRelease = key
+	end
+end)
+local hostSyncInputRelease = net.Packet.new("SSInputRelease2", function(sender, player, key)
+	local playerI = player:resolve()
+	if playerI and playerI:isValid() and key then
+		playerI:getData()._keyRelease = key
+		syncInputRelease:sendAsHost(net.EXCLUDE, sender, player, key)
+	end
+end)
+local function syncControlRelease(player, control)
+	if player:control(control) == input.RELEASED then
+		if net.online and net.localPlayer == player then
+			if net.host then
+				syncInputRelease:sendAsHost(net.ALL, nil, player:getNetIdentity(), control)
+			else
+				hostSyncInputRelease:sendAsClient(player:getNetIdentity(), control)
+			end
+		end
+			
+		return true
+		
+	elseif player:getData()._keyRelease == control then
+		player:getData()._keyRelease = nil
+		
+		return true
+	else
+	
+		return false
+	end
+end  -- @ we should really port all of starstorm libraries, including local 
+function distance(x1, y1, x2, y2)
+	local distance = math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
+	return distance
+end
+
+
+-- Nano Bomb object 
+local objNanoBomb = Object.new("ArtificerNanoBomb")
+objNanoBomb.sprite = sprBolt 
+objNanoBomb:addCallback("create", function(self)
+	local selfData = self:getData()
+	
+	selfData.direction = 0
+	selfData.life = 600
+	selfData.parent = nil 
+	self.mask = boltMask
+	self.angle = 0
+	selfData.charge = 0
+end)
+objNanoBomb:addCallback("step", function(self)
+	local selfData = self:getData()
+	
+	self.x = self.x + math.cos(math.rad(selfData.direction)) * 2
+	self.y = self.y - math.sin(math.rad(selfData.direction)) * 1.5
+	
+	self.angle = selfData.direction
+	selfData.direction = selfData.direction - angleDif(selfData.direction, 270) * 0.01
+	
+	if self:collidesMap(self.x, self.y) or selfData.life == 0 then 
+		if selfData.parent then 
+			selfData.parent:fireExplosion(self.x, self.y, 20/19, 20/4, 5)
+		end
+		self:destroy()
+	else
+		selfData.life = selfData.life - 1
+	end
+	
+	if self:isValid() and selfData.parent then
+		local r = 20
+		local actors = ParentObject.find("actors"):findAllEllipse(self.x - r, self.y - r, self.x + r, self.y + r)
+		for _, actor in ipairs(actors) do 
+			if self:collidesWith(actor, self.x, self.y) and actor:get("team") ~= selfData.parent:get("team") then 
+				selfData.parent:fireExplosion(self.x, self.y, 20/19, 20/4, 2)
+				self:destroy()
+				break
+			end
+		end
+	end
+	
+	if self:isValid() and selfData.parent and selfData.charge > 6 and selfData.life % 20 == 0 then 
+		selfData.targets = {}
+		local r = 100
+		local actors = ParentObject.find("actors"):findAllEllipse(self.x - r, self.y - r, self.x + r, self.y + r)
+		for _, actor in ipairs(actors) do 
+			if actor:get("team") ~= selfData.parent:get("team") then 
+				selfData.parent:fireBullet(self.x, self.y, 0, 1, 1):set("specific_target", actor.id)
+				table.insert(selfData.targets, actor)
+			end
+		end
+	end
+end)
+objNanoBomb:addCallback("draw", function(self)
+	local selfData = self:getData()
+	
+	if selfData.targets and #selfData.targets > 0 then 
+		for _, actor in ipairs(selfData.targets) do 
+			if actor:isValid() then 
+				local dis = distance(self.x, self.y, actor.x, actor.y)
+				graphics.color(Color.BLUE)
+				graphics.alpha(selfData.life % 20 / 40)
+				graphics.line(self.x, self.y, actor.x, actor.y)
+			end
+		end
+	end
+end)
+
+local objIce = Object.new("ArtificerIceObject")
+local iceMask = Sprite.load("ArtificerIceMask", path.."iceMask", 1, 0, 0)
+local iceSpriteSpawn = Sprite.load("ArtificerIceSpawn", path.."iceSpawn", 4, 0, 0)
+local iceSpriteIdle = Sprite.load("ArtificerIceIdle", path.."iceIdle", 8, 0, 0)
+objIce.sprite = iceSpriteSpawn
+objIce:addCallback("create", function(self)
+	local selfData = self:getData()
+	self.mask = iceMask
+end)
+
+
 -- Skill Code
 arti:addCallback("onSkill", function(player, skill, relevantFrame)
-  if skill == 1 then
-    local playerAc = player:getAccessor() -- "Agile"
+	local playerAc = player:getAccessor()
+	local playerData = player:getData()
+  if skill == 1 then -- "Agile"
     playerAc.pHspeed = math.approach(playerAc.pHspeed, 0, 0.025)
-    if playerAc.moveRight == 1 then
-      playerAc.pHspeed = playerAc.pHmax
-    elseif playerAc.moveLeft == 1 then
-      playerAc.pHspeed = -playerAc.pHmax
-    end
+	local dir = playerAc.moveRight - playerAc.moveLeft
+    playerAc.pHspeed = playerAc.pHmax * dir
     if relevantFrame == 2 then
       sndShoot1:play(0.8 + math.random() * 0.2, 1)
       local newFlameBolt = objFlameBolt:create(player.x, player.y)
@@ -302,30 +445,56 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
         newFlameBolt:getData().angle = player:getFacingDirection()
       end
     end
-  elseif skill == 4 then
-    local playerAc = player:getAccessor() -- "Agile"
+  elseif skill == 2.1 then 
+	playerAc.pHspeed = math.approach(playerAc.pHspeed, 0, 0.025)
+	local dir = playerAc.moveRight - playerAc.moveLeft
+    playerAc.pHspeed = playerAc.pHmax * 0.5 * dir
+	if syncControlRelease(player, "ability2") then 
+		playerData.charge = math.floor(player.subimage)
+		player.subimage = player.sprite.frames - 1
+	end
+	if player.subimage > player.sprite.frames - 1 then
+		player:set("activity", 0)
+		if not playerData.charge then 
+			playerData.charge = 8
+		end		
+		player:survivorActivityState(2.2, player:getAnimation("shoot2_fire"), 0.25, true, true)
+	end
+  elseif skill == 2.2 then
+	if relevantFrame == 3 then 
+		local bullet = objNanoBomb:create(player.x + player.xscale * 5, player.y - (12 + playerData.charge))
+		local dir = player.xscale
+		bullet:getData().parent = player
+		bullet.xscale = 1 + (playerData.charge / 8)
+		bullet.yscale = 1 + (playerData.charge / 8)
+		bullet:getData().direction = 90 - (60 - playerData.charge * 5) * dir
+		bullet.angle = bullet:getData().direction
+		bullet:getData().charge = playerData.charge
+	end
+  elseif skill == 4 then -- "Agile"
     playerAc.pHspeed = math.approach(playerAc.pHspeed, 0, 0.025)
-    if playerAc.moveRight == 1 then
-      playerAc.pHspeed = playerAc.pHmax
-    elseif playerAc.moveLeft == 1 then
-      playerAc.pHspeed = -playerAc.pHmax
-    end
-    for i = 0, player:get("sp") do
-      -- particle
-      local bullet = player:fireBullet(player.x, player.y - 2, player:getData().flamethrowerDirection, 60, 0.1 * player:get("attack_speed"), nil, DAMAGER_BULLET_PIERCE)
-      if math.chance(50) then
-        bullet:getData().doIgnite = true
-      end
-      if not sndShoot4_loop:isPlaying() then
-        sndShoot4_loop:play()
-      end
-      if i ~= 0 then
-        bullet:set("climb", i * 8)
-      end
-    end
-    if player.subimage > player.sprite.frames - 1 and player:getData().flamethrowerLoops ~= 0 then
-      player.subimage = 1
-      player:getData().flamethrowerLoops = player:getData().flamethrowerLoops - 1
-    end
+	local dir = playerAc.moveRight - playerAc.moveLeft
+    playerAc.pHspeed = playerAc.pHmax * dir * 0.75
+	if playerData.timer % 12 == 0 then
+		for i = 0, player:get("sp") do
+		  -- particle
+		  local bullet = player:fireBullet(player.x, player.y - 2, player:getData().flamethrowerDirection, 60, 0.25, nil, DAMAGER_BULLET_PIERCE)
+		  bullet:set("damage_degrade", 0.5)
+		  if math.chance(50) then
+			bullet:getData().doIgnite = true
+		  end
+		  if not sndShoot4_loop:isPlaying() then
+			sndShoot4_loop:play()
+		  end
+		  if i ~= 0 then
+			bullet:set("climb", i * 8)
+		  end
+		end
+	end
+	if player.subimage > player.sprite.frames - 1 and player:getData().flamethrowerLoops ~= 0 then
+		player.subimage = 1
+		player:getData().flamethrowerLoops = player:getData().flamethrowerLoops - 1
+	end
+	playerData.timer = playerData.timer + 1
   end -- elseif
 end)
