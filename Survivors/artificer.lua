@@ -440,7 +440,23 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
       newFlameBolt:getData().parent = player
       newFlameBolt:getData().team = player:get("team")
       if player:getData().envSuit >= 15 then
-        newFlameBolt:getData().angle = 270
+        newFlameBolt:getData().angle = 270 + dir * 45
+		local angle2 = 270 + dir * 45 + 15
+		local angle1 = 270 + dir * 45 - 15
+		for i = angle1, angle2 do 
+			local actors = ParentObject.find("actors"):findAllLine(player.x, player.y, player.x + math.cos(math.rad(i)) * 200, player.y - math.sin(math.rad(i)) * 200)
+			local stop = false
+			for _, actor in ipairs(actors) do
+				if actor:isValid() and actor:get("team") ~= player:get("team") then 
+					newFlameBolt:getData().angle = i 
+					stop = true
+					break
+				end
+			end
+			if stop then 
+				break
+			end
+		end
       else
         newFlameBolt:getData().angle = player:getFacingDirection()
       end
