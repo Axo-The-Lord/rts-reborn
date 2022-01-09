@@ -149,7 +149,7 @@ callback.register("onPlayerStep", function(player)
     else
       playerData.geyser = 0
     end
-    if player:get("moveUpHold") == 1 and player:get("free") == 1 and playerData.geyser <= 0 then
+    if player:get("activity") ~= 30 and player:get("moveUpHold") == 1 and player:get("free") == 1 and playerData.geyser <= 0 then
       playerData.envSuit = playerData.envSuit + 1
       if playerData.envSuit == 15 then
         sndEnvSuit:play(0.8 + math.random() * 0.2, 0.7)
@@ -302,49 +302,6 @@ specialFire:size(0.8, 1.2, 0.01, 0.02)
 specialFire:angle(0, 360, 0.01, 0.02, false)
 specialFire:life(45, 60)
 
-local function angleDif(current, target)
-  return ((((current - target) % 360) + 540) % 360) - 180
-end
-local syncInputRelease = net.Packet.new("SSInputRelease", function(sender, player, key)
-	local playerI = player:resolve()
-	if playerI and playerI:isValid() and key then
-		playerI:getData()._keyRelease = key
-	end
-end)
-local hostSyncInputRelease = net.Packet.new("SSInputRelease2", function(sender, player, key)
-	local playerI = player:resolve()
-	if playerI and playerI:isValid() and key then
-		playerI:getData()._keyRelease = key
-		syncInputRelease:sendAsHost(net.EXCLUDE, sender, player, key)
-	end
-end)
-local function syncControlRelease(player, control)
-	if player:control(control) == input.RELEASED then
-		if net.online and net.localPlayer == player then
-			if net.host then
-				syncInputRelease:sendAsHost(net.ALL, nil, player:getNetIdentity(), control)
-			else
-				hostSyncInputRelease:sendAsClient(player:getNetIdentity(), control)
-			end
-		end
-			
-		return true
-		
-	elseif player:getData()._keyRelease == control then
-		player:getData()._keyRelease = nil
-		
-		return true
-	else
-	
-		return false
-	end
-end  -- @ we should really port all of starstorm libraries, including local 
-function distance(x1, y1, x2, y2)
-	local distance = math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
-	return distance
-end
-
-
 -- Nano Bomb object 
 local objNanoBomb = Object.new("ArtificerNanoBomb")
 objNanoBomb.sprite = sprBolt 
@@ -395,6 +352,14 @@ objNanoBomb:addCallback("step", function(self)
 		for _, actor in ipairs(actors) do 
 			if actor:get("team") ~= selfData.parent:get("team") then 
 				selfData.parent:fireBullet(self.x, self.y, 0, 1, 1):set("specific_target", actor.id)
+				selfData.lightningAngle = posToAngle(self.x, self.y, actor.x, actor.y)
+				if math.chance(50) then 
+					selfData.lightningAngle = selfData.lightningAngle + 90
+				else
+					selfData.lightningAngle = selfData.lightningAngle - 90
+				end
+				selfData.xAmplifier = math.random(2, 5) / 2
+				selfData.yAmplifier = math.random(2, 5) / 2
 				table.insert(selfData.targets, actor)
 			end
 		end
@@ -407,9 +372,17 @@ objNanoBomb:addCallback("draw", function(self)
 		for _, actor in ipairs(selfData.targets) do 
 			if actor:isValid() then 
 				local dis = distance(self.x, self.y, actor.x, actor.y)
-				graphics.color(Color.BLUE)
-				graphics.alpha(selfData.life % 20 / 40)
-				graphics.line(self.x, self.y, actor.x, actor.y)
+				local xy1 = {x = self.x, y = self.y}
+				local xy4 = {x = actor.x, y = actor.y}
+				local angle = selfData.lightningAngle 
+				xy2 = {x = xy1.x + math.cos(math.rad(angle)) * dis / selfData.xAmplifier, y = xy1.y - math.sin(math.rad(angle)) * dis / selfData.xAmplifier}
+				xy3 = {x = xy4.x + math.cos(math.rad(angle)) * dis / selfData.yAmplifier, y = xy4.y - math.sin(math.rad(angle)) * dis / selfData.yAmplifier}
+				graphics.color(Color.LIGHT_BLUE)
+				graphics.alpha((selfData.life % 20)^2 / 20^2)
+				local points = createCubicCurve(xy1, xy2, xy3, xy4, dis)
+				for i = 1, dis do 
+					graphics.pixel(points[i].x, points[i].y)
+				end
 			end
 		end
 	end
@@ -418,11 +391,34 @@ end)
 local objIce = Object.new("ArtificerIceObject")
 local iceMask = Sprite.load("ArtificerIceMask", path.."iceMask", 1, 0, 0)
 local iceSpriteSpawn = Sprite.load("ArtificerIceSpawn", path.."iceSpawn", 4, 0, 0)
-local iceSpriteIdle = Sprite.load("ArtificerIceIdle", path.."iceIdle", 8, 0, 0)
-objIce.sprite = iceSpriteSpawn
+local iceSpriteIdle = Sprite.load("ArtificerIceIdle", path.."iceIdle", 7, 0, 0)
+local iceSpriteDeath = Sprite.load("ArtificerIceDeath", path.."iceDeath", 7, 0, 0)
+objIce.sprite = iceSpriteIdle
 objIce:addCallback("create", function(self)
 	local selfData = self:getData()
 	self.mask = iceMask
+	self.sprite = iceSpriteSpawn
+	self.spriteSpeed = 0.16
+end)
+objIce:addCallback("step", function(self)
+	local selfData = self:getData()
+	if self:isValid() and self.sprite == iceSpriteSpawn and self.subimage > self.sprite.frames - 1 then 
+		self.sprite = iceSpriteIdle
+		self.subimage = 1
+		selfData.life = 240
+	end
+	
+	if self:isValid() and self.sprite == iceSpriteIdle then 
+		selfData.life = selfData.life - 1 
+		if selfData.life == 0 then 
+			self.sprite = iceSpriteDeath
+			self.subimage = 1
+		end
+	end
+	
+	if self:isValid() and self.sprite == iceSpriteDeath and self.subimage > self.sprite.frames - 1 then 
+		self:destroy()
+	end
 end)
 
 
@@ -440,9 +436,9 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
       newFlameBolt:getData().parent = player
       newFlameBolt:getData().team = player:get("team")
       if player:getData().envSuit >= 15 then
-        newFlameBolt:getData().angle = 270 + dir * 45
-		local angle2 = 270 + dir * 45 + 15
-		local angle1 = 270 + dir * 45 - 15
+        newFlameBolt:getData().angle = 270 + player.xscale * 30
+		local angle2 = 270 + player.xscale * 30 + 30
+		local angle1 = 270 + player.xscale * 30 - 30
 		for i = angle1, angle2 do 
 			local actors = ParentObject.find("actors"):findAllLine(player.x, player.y, player.x + math.cos(math.rad(i)) * 200, player.y - math.sin(math.rad(i)) * 200)
 			local stop = false
