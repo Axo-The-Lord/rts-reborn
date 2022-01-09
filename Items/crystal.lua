@@ -51,7 +51,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "common",
-	description = "Increase damage to enemies within &y&13m&!& for &y&20%&!&&lt&(+20% per stack)&!&.",
+	description = "Increase damage to enemies within &y&13m&!& for &y&20%.&!&",
 	story = "Hope they don\'t up the price for this thing. I haven\'t had troubles with UES before, but I\'ve never had to ship a crystal this far before. Let me know if the package is marked as \"heavy\" when you get it.",
 	destination = "Geofferson Principality,\nHighward,\nTitan",
 	date = "05/23/2056",

@@ -70,7 +70,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "end",
-	description = "ALL characters within are &b&slowed by 50%&!& and have their &y&armor reduced to 20&!&.",
+	description = "ALL characters within are &b&slowed by 50%&!& and have their &y&armor reduced to 20.&!&",
 	story = "\"This relic tells a story... But it is not a fairy tale. It\'s a tragedy. A story of betrayal, regret, and sorrow. A story of two.\"\n\n\"Uh… okay…? How the hell do you know that?\"",
 	destination = "Some Place", -- Add destination!
 	date = "Some Date", -- Add date!

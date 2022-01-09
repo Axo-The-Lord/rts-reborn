@@ -12,7 +12,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "common",
-	description = "Add &b&1&!&&lt&(+1 per stack)&!& charge of your &b&second skill&!&.",
+	description = "Add &b&+1&!& charge of your &b&second skill.&!&",
 	story = "- Billed to: Captain [REDACTED]\n\n- Note from Sender: You going on a hunting trip or something? I\'ve never seen anyone order this much ammo before...",
 	destination = "Cargo Bay 10-C,\nTerminal 504-B,\nUES Port Trailing Comet",
 	date = "10/05/2056",

@@ -35,7 +35,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "use",
-	description = "Gain &y&500 armor&!& for &b&5 seconds&!&.",
+	description = "Gain &y&500 armor&!& for &b&5 seconds.&!&",
 	story = "Excerpt from the folk tale \"Clean as Jade\":\n\n\"... and while the peasants braced for the advancement of the Emperor’s army, the stone carver finished her last strike on the giant sculpture. The clang of the flat tool against the beautiful, translucent green sheen of the solid surface echoed through the trees and around all the villagers. Their souls were cleansed and made whole by the heavenly stone, now formed into the imposing presence of an elephant.\n\nDetermination and resolve had essentially been carved into the very spirit of the ones, who, just moments ago were clutching their farming implements and make-shift weapons with trembling hands. The attack was repelled that day. The Emperor’s army told stories about their metal weapons bouncing off the cloth of commoners. This inspiring encounter spread to other villages and...\"",
 	destination = "Some Place", -- Add destination!
 	date = "Some Date", -- Add date!

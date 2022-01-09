@@ -68,7 +68,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "uncommon",
-	description = "&y&Killing 3 enemies&!& within &y&1&!& second sends you into a &y&frenzy&!& for &y&6s&!&&lt&(+4s per stack)&!&. Increases &b&movement speed&!& by &b&50%&!& and &y&attack speed&!& by &y&100%&!&.",
+	description = "&y&Killing 3 enemies&!& within &y&1&!& second sends you into a &y&frenzy&!& for &y&6s.&!& Increases &b&movement speed&!& by &b&50%&!& and &y&attack speed&!& by &y&100%.&!&",
 	story = "Another antique for the collection. This bad boy was found on the battlefield where much of the War was fought. The excavation site was littered with bones, all surrounding the remains of one rebel soldier, who was carrying this artifact. According to hearsay and rumors, rebel soldiers wearing pauldrons much like this one would enter trances on the battlefield. Time would slow down, and all they could see was the enemy.\n\nOf course, it\'s just speculation, but… There were a lot of bodies surrounding this thing’s old owner. Be careful, OK?",
 	destination = "Jungle VII,\nMuseum of 2019,\nEarth",
 	date = "04/05/2056",

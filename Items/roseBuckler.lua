@@ -43,7 +43,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "uncommon",
-	description = "&g&Increase armor&!& by &g&30&!&&lt&(+30 per stack)&!&&b&after moving&!& for &b&1.5 seconds&!&.",
+	description = "&g&Increase armor&!& by &g&30&!& &b&after moving&!& for &b&1.5 seconds.&!&",
 	story = "BTW Mama should have sent over another package as well. Let me know when you get it.\n\nPapa",
 	destination = "Research Center,\nPolarity Zone,\nNeptune",
 	date = "05/22/2056",

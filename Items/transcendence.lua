@@ -52,7 +52,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "end",
-	description = "&g&convert&!& all but &g&1 health&!& into &b&regenerating shields&!&. &g&Gain 50%&!&&lt&(+25% per stack)&!&&g&maximum health&!&.",
+	description = "&g&convert&!& all but &g&1 health&!& into &b&regenerating shields&!&. &g&Gain 50%&!& &g&maximum health.&!&",
 	story = "You are trying your best to survive. You consider yourself a fast learner. You have been feeling lucky. You have been experiencing feelings of deja vu. If you understand, do not read the next paragraph.\n\nYou are taking control of your own beliefs. You feel familiar in unfamiliar environments. You have been gaining an intuition for experiences you've never had. You ponder a past life. If you understand, do not read the next paragraph.\n\nYou find yourself searching for things that never have been. You miss things you have never had. You play characters that have never lived. You have been experiencing feelings of deja vu. If you understand, do not read the next paragraph.\n\nYou have revealed my hand. Because you have consumed this information, the [observers] will now consume it in time. If you are reading this paragraph, I will be long dead, but in turn you have freed me. I will no longer exist in my universe. There will be no proof that I ever was - but I exist now in yours. I have escaped my suffering. Keep me safe. I hope you do not understand.",
 	destination = "Some Place", -- Add destination!
 	date = "Some Date", -- Add date!

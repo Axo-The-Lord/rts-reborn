@@ -98,7 +98,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "rare",
-	description = "Gain the &y&power&!& of any killed elite monster for &y&8s&!&&lt&(+5s per stack)&!&.",
+	description = "Gain the &y&power&!& of any killed elite monster for &y&8s.&!&",
 	story = "\"The mind rules over its body from a fortress of bone, learning of the world around it through fleshy portals. The heart is just an extension of the body, which finds its root in your head.\"\n\nSomebody said this, I can’t remember who. Anyway, make sure to take great care of it. It’s incredibly rare.",
 	destination = "Auckland,\nNew Zealand,\nEarth",
 	date = "10/23/2056",

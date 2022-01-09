@@ -41,7 +41,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "rare_locked",
-	description = "Upon killing an elite monster, &y&enter a frenzy&!& for &y&4s&!&&lt&(+4s per stack)&!&where &b&skills have 0.5s cooldowns&!&.",
+	description = "Upon killing an elite monster, &y&enter a frenzy&!& for &y&4s&!& where &b&skills have 0.5s cooldowns.&!&",
 	story = "Contained in this shipment should be a variety of biopsy samples from our late Mr. Jefferson. As you know, he was an extraordinary man in almost any manner. He was athletic, brilliant, kind, funny, and an all-around great human specimen.\n\nHe donated his body to science, and as we began the operation we found a most terrifying discovery.\n\nA quick visual examination of the subject\'s brain shows a very… particular oddity. It seems to be housing a variety of… glowing brain \"stalks\", similar to tubeworms. Trying to biopsy the stalks is impossible - they seem to disintegrate into dust the moment we remove it from the brain. We cannot explain this oddity at all. As such, we have included the entire brain in this shipment.\n\nPlease let us know if you find any explanation.",
 	destination = "Saura Cosmo,\nBeacon Post,\n???",
 	date = "11/11/2056",

@@ -24,7 +24,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "boss",
-	description = "Heal from &y&incoming damage&!& for &g&15&!&&lt&(+15 per stack)&!&.",
+	description = "Heal from &y&incoming damage&!& for &g&15.&!&",
 	story = "\"Yes - the egg. The grandparent incubates the eggs.\"\n\n\"And the child?\"\n\n\"The child lays the egg.\"\n\n\"And the egg becomes the...?\"\n\n\"The parent.\"\n\n\"Okay. And the parent does what?\"\n\n\"Takes care of the children - and the grandparent.\"\n\n\"And the grandparent is the youngest?\"\n\n\"Younger than the child, yes. But not the youngest.\"\n\n\"Who is the youngest?\"\n\n\"The parent.\"\n\n\"...\"",
 	destination = "Some Place", -- Add destination!
 	date = "Some Date", -- Add date!

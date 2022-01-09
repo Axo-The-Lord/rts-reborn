@@ -44,7 +44,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "uncommon",
-	description = "Activating your Use Item gives you &y&70% attack speed&!& for &y&8s&!&&lt&(+4s per stack)&!&.",
+	description = "Activating your Use Item gives you &y&70% attack speed&!& for &y&8s.&!&",
 	story = "\"The War of 2019, while lasting only a brief year, was the bloodiest conflict in human history. As the war got deadlier throughout the year, many rebel groups began to rely on tradition and history for inspiration.\n\nThe War Horn, pictured above was a favorite of the Northern Fist Rebellion for both its inspirational and tactical uses.\"",
 	destination = "National WW19 Museum,\nJungle VII,\nEarth",
 	date = "4/12/2056",

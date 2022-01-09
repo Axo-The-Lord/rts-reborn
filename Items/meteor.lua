@@ -12,6 +12,6 @@ if not modloader.checkFlag("rts_classic_meteorite") then
 		destination = "Some Place", -- Add Destination!
 		date = "Some Date", -- Add Date!
 		priority = colorString("Unaccounted For", LunarColor)
-	 }
+	}
 	Lunar.addItem(meteorite)
 end

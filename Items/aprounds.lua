@@ -22,7 +22,7 @@ end)
 -- Item Log
 item:setLog{
 	group = "common",
-	description = "Deal an additional &y&20%&!&&lt&(+20% per stack)&!&to bosses.",
+	description = "Deal an additional &y&20%&!& damage to bosses.",
 	story = "Alright, just to clarify, these rounds aren’t faulty. Heck, I\'d say they\'re better than the standard, but... that\'s kind of the problem. I don\'t know if it was a new shipment of materials, or a problem with the assembly line, but these rounds are supposed to pierce armor. Not pierce through the armor, five feet of reinforced concrete, a few warehouses, and an armored truck.\n\nCould you guys look into this so we don\'t like, violate any Geneva Conventions or anything?",
 	destination = "Fort Margaret,\nJonesworth System",
 	date = "3/07/2056",
