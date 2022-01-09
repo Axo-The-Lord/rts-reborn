@@ -262,7 +262,7 @@ callback.register("preHit", function(damager, hit)
 		end
 	  end
 	  
-      -- Get ready for it -- @ no need 
+      -- Get ready for it -- <altzeus> no need 
       --[[if hit:hasBuff(ignite[1]) then
         hit:removeBuff(ignite[1])
         hit:applyBuff(ignite[2], 4 * 60)
@@ -352,15 +352,12 @@ objNanoBomb:addCallback("step", function(self)
 		for _, actor in ipairs(actors) do 
 			if actor:get("team") ~= selfData.parent:get("team") then 
 				selfData.parent:fireBullet(self.x, self.y, 0, 1, 1):set("specific_target", actor.id)
-				selfData.lightningAngle = posToAngle(self.x, self.y, actor.x, actor.y)
-				if math.chance(50) then 
-					selfData.lightningAngle = selfData.lightningAngle + 90
-				else
-					selfData.lightningAngle = selfData.lightningAngle - 90
-				end
-				selfData.xAmplifier = math.random(2, 5) / 2
-				selfData.yAmplifier = math.random(2, 5) / 2
-				table.insert(selfData.targets, actor)
+				local angle = {
+				ang = posToAngle(self.x, self.y, actor.x, actor.y)+ math.random(-45, 45) * 2,
+				amp1 = math.random(2, 5) / 2,
+				amp2 = math.random(2, 5) / 2
+				}
+				selfData.targets[actor] = angle
 			end
 		end
 	end
@@ -368,15 +365,14 @@ end)
 objNanoBomb:addCallback("draw", function(self)
 	local selfData = self:getData()
 	
-	if selfData.targets and #selfData.targets > 0 then 
-		for _, actor in ipairs(selfData.targets) do 
+	if selfData.targets then 
+		for actor, angle in pairs(selfData.targets) do 
 			if actor:isValid() then 
 				local dis = distance(self.x, self.y, actor.x, actor.y)
 				local xy1 = {x = self.x, y = self.y}
 				local xy4 = {x = actor.x, y = actor.y}
-				local angle = selfData.lightningAngle 
-				xy2 = {x = xy1.x + math.cos(math.rad(angle)) * dis / selfData.xAmplifier, y = xy1.y - math.sin(math.rad(angle)) * dis / selfData.xAmplifier}
-				xy3 = {x = xy4.x + math.cos(math.rad(angle)) * dis / selfData.yAmplifier, y = xy4.y - math.sin(math.rad(angle)) * dis / selfData.yAmplifier}
+				xy2 = {x = xy1.x + math.cos(math.rad(angle.ang)) * dis / angle.amp1, y = xy1.y - math.sin(math.rad(angle.ang)) * dis / angle.amp1}
+				xy3 = {x = xy4.x + math.cos(math.rad(angle.ang)) * dis / angle.amp2, y = xy4.y - math.sin(math.rad(angle.ang)) * dis / angle.amp2}
 				graphics.color(Color.LIGHT_BLUE)
 				graphics.alpha((selfData.life % 20)^2 / 20^2)
 				local points = createCubicCurve(xy1, xy2, xy3, xy4, dis)
@@ -388,20 +384,42 @@ objNanoBomb:addCallback("draw", function(self)
 	end
 end)
 
+-- ice object
 local objIce = Object.new("ArtificerIceObject")
 local iceMask = Sprite.load("ArtificerIceMask", path.."iceMask", 1, 0, 0)
-local iceSpriteSpawn = Sprite.load("ArtificerIceSpawn", path.."iceSpawn", 4, 0, 0)
-local iceSpriteIdle = Sprite.load("ArtificerIceIdle", path.."iceIdle", 7, 0, 0)
-local iceSpriteDeath = Sprite.load("ArtificerIceDeath", path.."iceDeath", 7, 0, 0)
+local iceSpriteSpawn = Sprite.load("ArtificerIceSpawn", path.."iceSpawn", 4, 2, 7)
+local iceSpriteIdle = Sprite.load("ArtificerIceIdle", path.."iceIdle", 7, 4, 0)
+local iceSpriteDeath = Sprite.load("ArtificerIceDeath", path.."iceDeath", 7, 2, 3)
 objIce.sprite = iceSpriteIdle
 objIce:addCallback("create", function(self)
 	local selfData = self:getData()
 	self.mask = iceMask
 	self.sprite = iceSpriteSpawn
-	self.spriteSpeed = 0.16
+	self.spriteSpeed = 0.24
+	selfData.iceTotal = 0
+	selfData.damageDelay = {}
 end)
 objIce:addCallback("step", function(self)
+	if not self:collidesMap(self.x, self.y + 1) then 
+		local a = 0
+		while a < 500 do
+			if not self:collidesMap(self.x, self.y + 1) then 
+				self.y = self.y + 1
+			else
+				break
+			end
+		end
+	end
+	
 	local selfData = self:getData()
+	
+	if self:isValid() and self.sprite == iceSpriteSpawn and self.subimage > self.sprite.frames - 2 and selfData.iceTotal > 0 then 
+		local ice = objIce:create(self.x + self.xscale * 12, self.y - 5)
+		ice.xscale = self.xscale 
+		ice:getData().parent = selfData.parent
+		ice:getData().iceTotal = selfData.iceTotal - 1
+		selfData.iceTotal = 0	
+	end
 	if self:isValid() and self.sprite == iceSpriteSpawn and self.subimage > self.sprite.frames - 1 then 
 		self.sprite = iceSpriteIdle
 		self.subimage = 1
@@ -409,6 +427,17 @@ objIce:addCallback("step", function(self)
 	end
 	
 	if self:isValid() and self.sprite == iceSpriteIdle then 
+		if selfData.parent and selfData.life % 5 == 0 then 
+			local r = 20
+			local actors = ParentObject.find("actors"):findAllEllipse(self.x - r, self.y - r, self.x + r, self.y + r)
+			for _, actor in ipairs(actors) do 
+				if actor:isValid() and not actor:getData().hitIce and actor:get("team") ~= selfData.parent:get("team") then 
+					selfData.parent:fireBullet(self.x, self.y, 0, 1, 1):set("specific_target", actor.id)
+					actor:getData().hitIce = 40
+				end
+			end
+		end
+			
 		selfData.life = selfData.life - 1 
 		if selfData.life == 0 then 
 			self.sprite = iceSpriteDeath
@@ -460,7 +489,7 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
   elseif skill == 2.1 then 
 	playerAc.pHspeed = math.approach(playerAc.pHspeed, 0, 0.025)
 	local dir = playerAc.moveRight - playerAc.moveLeft
-    playerAc.pHspeed = playerAc.pHmax * 0.5 * dir
+    playerAc.pHspeed = playerAc.pHmax * 0.75 * dir
 	if syncControlRelease(player, "ability2") then 
 		playerData.charge = math.floor(player.subimage)
 		player.subimage = player.sprite.frames - 1
@@ -482,6 +511,15 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
 		bullet:getData().direction = 90 - (60 - playerData.charge * 5) * dir
 		bullet.angle = bullet:getData().direction
 		bullet:getData().charge = playerData.charge
+	end
+  elseif skill == 3 then 
+	local dir = playerAc.moveRight - playerAc.moveLeft
+    playerAc.pHspeed = playerAc.pHmax * 0.75 * dir
+	if relevantFrame == 4 then 
+		local ice = objIce:create(player.x + player.xscale * 10, player.y - 5)
+		ice.xscale = player.xscale 
+		ice:getData().parent = player
+		ice:getData().iceTotal = 5 * (playerAc.sp + 1)
 	end
   elseif skill == 4 then -- "Agile"
     playerAc.pHspeed = math.approach(playerAc.pHspeed, 0, 0.025)
@@ -509,4 +547,13 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
 	end
 	playerData.timer = playerData.timer + 1
   end -- elseif
+end)
+
+callback.register("onActorStep", function(actor)
+	if actor:isValid() and actor:getData().hitIce then 
+		actor:getData().hitIce = actor:getData().hitIce - 1
+		if actor:getData().hitIce == 0 then 
+			actor:getData().hitIce = nil
+		end
+	end
 end)
