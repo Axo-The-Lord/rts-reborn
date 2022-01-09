@@ -110,8 +110,11 @@ end)
 -- Item Log
 item:setLog{
 	group = "end",
-	description = "Drink the Tonic, gaining a boost for 20 seconds. Increases &y&damage&!& by &y&+100%&!&. Increases &y&attack speed&!& by &y&+70%&!&. Increases &y&armor&!& by &y&+20&!&. Increases &g&maximum health&!& by &g&+50%&!&. Increases &y&passive health regeneration&!& by &y&+300%&!&. Increases &b&movespeed&!& by &b&+30%&!&.\n\nWhen the Tonic wears off, you have a &r&20%&!& chance to gain a &r&Tonic Affliction, reducing all of your stats&!& by &r&-5%&!&&lt&(-5% per stack)&!&.",
-	story = "\"Reality is whatever the mind decides it to be. Take a sip of the drink, and the mind becomes malleable. From there, you can shape it into whatever form you please... and the world around you follows your example.\"\n\n- Sigibold the Drunken",
+	--description = "Drink the Tonic, gaining a boost for 20 seconds. Increases &y&damage&!& by &y&+100%.&!& Increases &y&attack speed&!& by &y&+70%.&!& Increases &y&armor&!& by &y&+20.&!& Increases &g&maximum health&!& by &g&+50%.&!& Increases &y&passive health regeneration&!& by &y&+300%.&!& Increases &b&movespeed&!& by &b&+30%.&!& When the Tonic wears off, you have a &r&20%&!& chance to gain a &r&Tonic Affliction, reducing all of your stats&!& by &r&-5%.&!&",
+	--description = "Drink the Tonic, gaining a boost for 20 seconds. See &lt&Order Details&!& for details. When the Tonic wears off, you have a &r&20%&!& chance to gain a &r&Tonic Affliction, reducing all of your stats&!& by &r&-5%.&!&",
+	--description = "For 20s, increases &y&damage&!& by &y&+100%; attack speed&!& by &y&+70%; armor&!& by &y&+20;&!& &g&maxhp&!& by &g&+50%;&!& &y&passive hp regen&!& by &y&+300%;&!& &b&movespeed&!& by &b&+30%.&!& When the Tonic wears off, you have a &r&20%&!& chance to gain a &r&Tonic Affliction, reducing all of your stats&!& by &r&-5%.&!&",
+	description = "For 20s, increases: damage &y&+100%;&!& attack speed &y&+70%;&!& armor &y&+20;&!& maxhp &g&+50%;&!& passive hp regen &y&+300%;&!& movespeed &b&+30%.&!",
+	story = "\"Reality is whatever the mind decides it to be. Take a sip of the drink, and the mind becomes malleable. From there, you can shape it into whatever form you please... and the world around you follows your example.\"\n\n- Sigibold the Drunken\n\n\n\n\n\n[IMPORTANT] When the Tonic wears off, you have a 20% chance to gain a Tonic Affliction, reducing all of your stats by -5%.",
 	destination = "Some Place", -- Add destination!
 	date = "Some Date", -- Add date!
 	priority = colorString("Unaccounted For", LunarColor)

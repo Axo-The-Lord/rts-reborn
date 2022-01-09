@@ -4,7 +4,6 @@ item.pickupText = "Gain gold on hit... BUT lose gold on getting hit."
 item.sprite = Sprite.load("Items/resources/crown.png", 1, 12, 13)
 Lunar.addItem(item)
 item.color = LunarColor
---local c = tostring(LunarColor)
 
 local EfGold = Object.find("EfGold", "vanilla")
 local sound = Sound.find("Coin", "vanilla")
