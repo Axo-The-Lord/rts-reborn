@@ -3,7 +3,7 @@
 
 local item = Item("Spinel Tonic")
 item.pickupText = "Gain a massive boost to ALL stats. Chance to gain an affliction that reduces ALL stats."
-item.sprite = Sprite.load("Items/resources/tonic.png", 2, 9, 14)
+item.sprite = Sprite.load("Items/resources/spinelTonic.png", 2, 9, 14)
 item.isUseItem = true
 item.useCooldown = 60
 Lunar.addItem(item)
@@ -13,7 +13,7 @@ item.color = LunarColor
 
 local affliction = Item("Tonic Affliction")
 affliction.pickupText = "Reduce ALL stats when not under the effects of Spinel Tonic."
-affliction.sprite = Sprite.load("Items/resources/tonicAffliction.png", 1, 11, 13)
+affliction.sprite = Sprite.load("Items/resources/spinelTonicAffliction.png", 1, 11, 13)
 affliction.color = Color.BLACK
 
 affliction:addCallback("pickup", function(player)
@@ -36,7 +36,7 @@ end)
 
 -- Buff
 local tonicBuff = Buff.new("Tonic Buff")
-tonicBuff.sprite = Sprite.load("Items/resources/tonicBuff.png", 1, 4, 6)
+tonicBuff.sprite = Sprite.load("Items/resources/spinelTonicBuff.png", 1, 4, 6)
 
 tonicBuff:addCallback("start", function(player)
 	local playerAc = player:getAccessor()
