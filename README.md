@@ -100,9 +100,9 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 * Needs proper item log?
 * Starstorm Tab Menu
 
-~~**Brittle Crown**~~
+~~**Brittle Crown**~~ \~Affenstark
 * ~~Proper item log?~~
-* ~~Maybe making actual coins come out of the enemy instead of some damage number, similar to the money bag equipment~~ \~Affenstark
+* ~~Maybe making actual coins come out of the enemy instead of some damage number, similar to the money bag equipment~~
 
 **Shaped Glass**
 * Proper item log?
