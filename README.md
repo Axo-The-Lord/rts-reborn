@@ -102,7 +102,7 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 
 **Brittle Crown**
 * Proper item log?
-* Maybe making actual coins come out of the enemy instead of some damage number, similar to the money bag equipment
+* ~~Maybe making actual coins come out of the enemy instead of some damage number, similar to the money bag equipment~~ \~Affenstark
 
 **Shaped Glass**
 * Proper item log?

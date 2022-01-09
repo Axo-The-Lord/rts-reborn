@@ -1,5 +1,6 @@
--- Brittle Crown
+local EfGold = Object.find("EfGold", "vanilla")
 
+-- Brittle Crown
 local item = Item("Brittle Crown")
 item.pickupText = "Gain gold on hit... BUT lose gold on getting hit."
 item.sprite = Sprite.load("Items/resources/crown.png", 1, 12, 13)
@@ -21,7 +22,7 @@ callback.register("onDamage", function(hit, damage)
       end
       sound:play(0.8 * math.random() * 0.4)
       if misc.getOption("video.show_damage") then
-        CreateDamageText("-"..math.round(goldLoss), player.x, player.y - 6, Color.ROR_YELLOW)
+        CreateDamageText("-"..math.round(goldLoss), player.x - 12, player.y - 12, Color.ROR_YELLOW)
       end
     end
   end
@@ -35,11 +36,8 @@ callback.register("onHit", function(damager, actor, x, y)
     if stack > 0 then
       local goldGain = 2 * stack * Difficulty.getScaling(cost)
       if math.chance(30) then
-        misc.setGold(misc.getGold() + math.clamp(math.random(goldGain), 2, math.huge))
-        sound:play(0.8 * math.random() * 0.4)
-        if misc.getOption("video.show_damage") == true then
-          CreateDamageText("+"..math.round(goldGain), parent.x, parent.y - 6, Color.ROR_YELLOW)
-        end
+        local goldInst = EfGold:create(x, y)
+        goldInst:set("value", math.clamp(math.random(goldGain), 2, math.huge))
       end
     end
   end
@@ -52,7 +50,7 @@ item:setLog{
 	story = "A wretched carnival.\n\nThey were doomed for good reason. Dunepeople of Aphelia: lost, in fanatic worship of parasitic influences. Lemurians: destined to a dead planet, picked clean. Chitin beasts. Automations of death. Why do you bring them home? They were not meant to survive.\n\nI have watched you for ages, from my dead rock - and every century, you disgust me with vanity. You invite vermin into your home. Wretches. Rats. Monsters. Creatures without restraint. Each and every one, planet killers. And yet, you entertain them as guests. Like children, requiring saving and protection.\n\nShe should have died for me. Her gift was wasted on you.\n\nAnd when will we open discussion - dear brother - of all your thin lies? Why do you forbid your guests to leave? To pilot? Why do you fashion great walls and gates? Why do you weave constructs of destruction, if your role is protection? They are entries in your collection. You slaver. Gatekeeper. Hoarder.\n\nYour death is fated. When you die - and you WILL die - I will be ready. I have been patient for millennia. That planet... is mine.",
 	destination = "Some Place", -- Add destination!
 	date = "Some Date", -- Add date!
-	priority = "&"..c.."&Unaccounted For&!&"
+	priority = "&"..item.color.."&Unaccounted For&!&"
 }
 
 -- Tab Menu
