@@ -10,33 +10,33 @@
   -- y: The y coordinate to search from.
   -- dir: Which direction to search; positive values search downwards, negative values search upwards. Defaults to searching downwards.
 FindGround = function(x, y, dir)
-  local dy = y
-  local step = 1
-  if dir then
-    if dir < 0 then
-      dir = -1
-    elseif dir > 0 then
-      dir = 1
-    else
-      dir = 1
-    end
-    step = dir
-  end
-  local sX, sY = Stage.getDimensions()
-  while dy ~= (sY*step) do
-    if Stage.collidesPoint(x, dy) then
-      break
-    else
-      dy = dy + step
-    end
-  end
-  return dy
+	local dy = y
+	local step = 1
+	if dir then
+		if dir < 0 then
+			dir = -1
+		elseif dir > 0 then
+			dir = 1
+		else
+			dir = 1
+		end
+		step = dir
+	end
+	local sX, sY = Stage.getDimensions()
+	while dy ~= (sY*step) do
+		if Stage.collidesPoint(x, dy) then
+			break
+		else
+			dy = dy + step
+		end
+	end
+	return dy
 end
 
 -- Prints to the console when a profile flag is enabled. You shouldn't use this in an RTS-dependent mod (probably).
 local debugSet = modloader.checkFlag("rts_debug")
 function debugPrint(...)
-  if debugSet then print(...) end
+	if debugSet then print(...) end
 end
 export("debugPrint", debugPrint)
 
@@ -58,12 +58,12 @@ function contains(t, value)
 end
 
 function colorString(str, color)
-    return "&" .. tostring(color.gml) .. "&" .. str .. "&!&"
+	return "&" .. tostring(color.gml) .. "&" .. str .. "&!&"
 end
 
 -- Neik's functions and stuff 
 function angleDif(current, target)
-  return ((((current - target) % 360) + 540) % 360) - 180
+	return ((((current - target) % 360) + 540) % 360) - 180
 end
 local syncInputRelease = net.Packet.new("SSInputRelease", function(sender, player, key)
 	local playerI = player:resolve()
