@@ -64,6 +64,7 @@ local Items = {
   "shapedGlass",
   "spinelTonic",
   "effigy",
+  "meteor",
   -- Use
   "elephant",
   "hud",

@@ -6,9 +6,9 @@
 
 -- Returns the y coordinate of the ground relative to the specified coordinates and direction.
 -- Parameters:
-  -- x: The x coordinate to search from.
-  -- y: The y coordinate to search from.
-  -- dir: Which direction to search; positive values search downwards, negative values search upwards. Defaults to searching downwards.
+	-- x: The x coordinate to search from.
+	-- y: The y coordinate to search from.
+	-- dir: Which direction to search; positive values search downwards, negative values search upwards. Defaults to searching downwards.
 FindGround = function(x, y, dir)
 	local dy = y
 	local step = 1
@@ -42,8 +42,8 @@ export("debugPrint", debugPrint)
 
 -- Finds if a table contains a certain value. Returns true if the value is found, false if the value is not.
 -- Parameters:
-  -- t: The table you are searching.
-  -- value: What you are looking for in the table.
+	-- t: The table you are searching.
+	-- value: What you are looking for in the table.
 function contains(t, value)
 	if t then
 		for _, v in pairs(t) do
@@ -61,7 +61,7 @@ function colorString(str, color)
 	return "&" .. tostring(color.gml) .. "&" .. str .. "&!&"
 end
 
--- Neik's functions and stuff 
+-- Neik's functions and stuff
 function angleDif(current, target)
 	return ((((current - target) % 360) + 540) % 360) - 180
 end
@@ -88,18 +88,18 @@ function syncControlRelease(player, control)
 				hostSyncInputRelease:sendAsClient(player:getNetIdentity(), control)
 			end
 		end
-			
+
 		return true
-		
+
 	elseif player:getData()._keyRelease == control then
 		player:getData()._keyRelease = nil
-		
+
 		return true
 	else
-	
+
 		return false
 	end
-end 
+end
 
 function distance(x1, y1, x2, y2)
 	local distance = math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
@@ -109,11 +109,11 @@ function posToAngle(x1, y1, x2, y2, rad)
 	local deltaX = x2 - x1
 	local deltaY = y1 - y2
 	local result = math.atan2(deltaY, deltaX)
-	
+
 	if not rad then
 		result = math.deg(result)
 	end
-	
+
 	return result
 end
 
@@ -129,7 +129,7 @@ function bezier4(p1,p2,p3,p4,mu)
 	p.x = mum13*p1.x + 3*mu*mum1*mum1*p2.x + 3*mu*mu*mum1*p3.x + mu3*p4.x
 	p.y = mum13*p1.y + 3*mu*mum1*mum1*p2.y + 3*mu*mu*mum1*p3.y + mu3*p4.y
 
-	return p	
+	return p
 end
 
 function createCubicCurve(p1, p2, p3, p4, steps) -- <altzeus> steps are required - just do it via distance()

@@ -7,7 +7,6 @@ Lunar.addItem(item)
 item.color = LunarColor
 item.isUseItem = true
 item.useCooldown = 15
-local c = tostring(LunarColor)
 
 ItemPool.find("enigma", "vanilla"):add(item) -- Enigma
 
@@ -75,5 +74,5 @@ item:setLog{
 	story = "\"This relic tells a story... But it is not a fairy tale. It\'s a tragedy. A story of betrayal, regret, and sorrow. A story of two.\"\n\n\"Uh… okay…? How the hell do you know that?\"",
 	destination = "Some Place", -- Add destination!
 	date = "Some Date", -- Add date!
-	priority = "&"..c.."&Unaccounted For&!&"
+	priority = colorString("Unaccounted For", LunarColor)
 }

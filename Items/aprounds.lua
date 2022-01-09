@@ -6,17 +6,17 @@ item.sprite = Sprite.load("Items/resources/aprounds.png", 1, 12, 13)
 item:setTier("common")
 
 callback.register("onHit", function(damager, actor, x, y)
-  local parent = damager:getParent()
-  if isa(parent, "PlayerInstance") then
-    local stack = parent:countItem(item)
-    if stack > 0 and actor:isBoss() then
-      local damageBonus = parent:get("damage") * 0.2 * stack
-      damager:set("damage", parent:get("damage") + damageBonus)
-      if misc.getOption("video.show_damage") == true then
-        misc.damage(damageBonus, actor.x, actor.y, false, Color.ORANGE)
-      end
-    end
-  end
+	local parent = damager:getParent()
+	if isa(parent, "PlayerInstance") then
+		local stack = parent:countItem(item)
+		if stack > 0 and actor:isBoss() then
+			local damageBonus = parent:get("damage") * 0.2 * stack
+			damager:set("damage", parent:get("damage") + damageBonus)
+			if misc.getOption("video.show_damage") == true then
+				misc.damage(damageBonus, actor.x, actor.y, false, Color.ORANGE)
+			end
+		end
+	end
 end)
 
 -- Item Log
@@ -31,5 +31,5 @@ item:setLog{
 
 -- Tab Menu
 if modloader.checkMod("Starstorm") then
-  TabMenu.setItemInfo(item, nil, "Deal 20% extra damage to bosses.", "+20% damage.")
+	TabMenu.setItemInfo(item, nil, "Deal 20% extra damage to bosses.", "+20% damage.")
 end
