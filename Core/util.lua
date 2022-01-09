@@ -57,6 +57,10 @@ function contains(t, value)
 	end
 end
 
+function colorString(str, color)
+    return "&" .. tostring(color.gml) .. "&" .. str .. "&!&"
+end
+
 -- Neik's functions and stuff 
 function angleDif(current, target)
   return ((((current - target) % 360) + 540) % 360) - 180
