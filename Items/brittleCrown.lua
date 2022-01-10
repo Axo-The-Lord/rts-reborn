@@ -11,38 +11,38 @@ local sound = Sound.find("Coin", "vanilla")
 
 -- Lose Gold
 callback.register("onDamage", function(hit, damage)
-  if isa(hit, "PlayerInstance") and damage > 0 then
-    local stack = hit:countItem(item)
-    if stack > 0 then
-      local player = hit -- Not this again!
-      local goldLoss = math.ceil(damage * stack)
-      if not net.online or net.localPlayer == player then
-        misc.setGold(math.max(misc.getGold() - goldLoss, 0))
-      end
-      sound:play(0.8 * math.random() * 0.4)
-      if misc.getOption("video.show_damage") then
-        CreateDamageText("-"..math.round(goldLoss), player.x, player.y - 6, Color.ROR_YELLOW)
-      end
-    end
-  end
+	if isa(hit, "PlayerInstance") and damage > 0 then
+		local stack = hit:countItem(item)
+		if stack > 0 then
+			local player = hit -- Not this again!
+			local goldLoss = math.ceil(damage * stack)
+			if not net.online or net.localPlayer == player then
+				misc.setGold(math.max(misc.getGold() - goldLoss, 0))
+			end
+			sound:play(0.8 * math.random() * 0.4)
+			if misc.getOption("video.show_damage") then
+				CreateDamageText("-"..math.round(goldLoss), player.x, player.y - 6, Color.ROR_YELLOW)
+			end
+		end
+	end
 end)
 
 -- Gain Gold
 callback.register("onHit", function(damager, actor, x, y)
-  local parent = damager:getParent()
-  if isa(parent, "PlayerInstance") then
-    local stack = parent:countItem(item)
-    if stack > 0 then
-      local goldGain = 2 * stack * Difficulty.getScaling(cost)
-      if math.chance(30) then
-        misc.setGold(misc.getGold() + math.clamp(math.random(goldGain), 2, math.huge))
-        sound:play(0.8 * math.random() * 0.4)
-        if misc.getOption("video.show_damage") == true then
-          CreateDamageText("+"..math.round(goldGain), parent.x, parent.y - 6, Color.ROR_YELLOW)
-        end
-      end
-    end
-  end
+	local parent = damager:getParent()
+	if isa(parent, "PlayerInstance") then
+		local stack = parent:countItem(item)
+		if stack > 0 then
+			local goldGain = 2 * stack * Difficulty.getScaling(cost)
+			if math.chance(30) then
+				misc.setGold(misc.getGold() + math.clamp(math.random(goldGain), 2, math.huge))
+				sound:play(0.8 * math.random() * 0.4)
+				if misc.getOption("video.show_damage") == true then
+					CreateDamageText("+"..math.round(goldGain), parent.x, parent.y - 6, Color.ROR_YELLOW)
+				end
+			end
+		end
+	end
 end)
 
 -- Item Log
@@ -57,5 +57,5 @@ item:setLog{
 
 -- Tab Menu
 if modloader.checkMod("Starstorm") then
-  TabMenu.setItemInfo(item, nil, "30% chance to gain 2 gold on hit, but lose gold when you are hit.", "+2 gold gain, +100% gold loss.")
+	TabMenu.setItemInfo(item, nil, "30% chance to gain 2 gold on hit, but lose gold when you are hit.", "+2 gold gain, +100% gold loss.")
 end

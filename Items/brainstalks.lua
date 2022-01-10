@@ -11,36 +11,36 @@ brainBuff.sprite = Sprite.load("Items/resources/brainstalksBuff", 1, 6, 7)
 
 -- Vignette
 brainBuff:addCallback("start", function(player)
-  local player = net.localPlayer or misc.players[1]
-  if player:hasBuff(brainBuff) then
-    local vignette = Object.find("Vignette", "rts-reborn")
-    vignette.alpha = 0.7
-    vignette.color = Color.fromHex(0xF156FB)
-    vignette:getData().rate = 0.001
-    DrawVignette(vignette)
-  end
+    local player = net.localPlayer or misc.players[1]
+    if player:hasBuff(brainBuff) then
+        local vignette = Object.find("Vignette", "rts-reborn")
+        vignette.alpha = 0.7
+        vignette.color = Color.fromHex(0xF156FB)
+        vignette:getData().rate = 0.001
+        DrawVignette(vignette)
+    end
 end)
 
 brainBuff:addCallback("step", function(player)
-  for i = 2, 5 do
-    if player:getAlarm(i) > 30 then
-      player:setAlarm(i, 30)
+    for i = 2, 5 do
+        if player:getAlarm(i) > 30 then
+            player:setAlarm(i, 30)
+        end
     end
-  end
 end)
 
 callback.register("onNPCDeathProc", function(npc, player)
-  local stack = player:countItem(item)
-  if stack > 0 then
-    if npc:get("prefix_type") > 0 then
-      player:applyBuff(brainBuff, (4 * 60) * stack)
+    local stack = player:countItem(item)
+    if stack > 0 then
+        if npc:get("prefix_type") > 0 then
+            player:applyBuff(brainBuff, (4 * 60) * stack)
+        end
     end
-  end
 end)
 
 -- Item Log
 item:setLog{
-  group = "rare_locked",
+    group = "rare_locked",
 	description = "Upon killing an elite monster, &y&enter a frenzy&!& for &y&4s&!&&lt&(+4s per stack)&!&where &b&skills have 0.5s cooldowns&!&.",
 	story = "Contained in this shipment should be a variety of biopsy samples from our late Mr. Jefferson. As you know, he was an extraordinary man in almost any manner. He was athletic, brilliant, kind, funny, and an all-around great human specimen.\n\nHe donated his body to science, and as we began the operation we found a most terrifying discovery.\n\nA quick visual examination of the subject\'s brain shows a very… particular oddity. It seems to be housing a variety of… glowing brain \"stalks\", similar to tubeworms. Trying to biopsy the stalks is impossible - they seem to disintegrate into dust the moment we remove it from the brain. We cannot explain this oddity at all. As such, we have included the entire brain in this shipment.\n\nPlease let us know if you find any explanation.",
 	destination = "Saura Cosmo,\nBeacon Post,\n???",
@@ -50,7 +50,7 @@ item:setLog{
 
 -- Tab Menu
 if modloader.checkMod("Starstorm") then
-  TabMenu.setItemInfo(item, nil, "Skills have no cooldowns for 4 seconds after killing an elite.", "+4 seconds.")
+    TabMenu.setItemInfo(item, nil, "Skills have no cooldowns for 4 seconds after killing an elite.", "+4 seconds.")
 end
 
 -- Achievement
@@ -59,29 +59,29 @@ unlock.requirement = 1
 unlock.deathReset = false
 unlock.unlockText = "This item will now drop."
 callback.register("postLoad", function()
-  if modloader.checkMod("Starstorm") then
-    unlock.description = "Kill an elite boss on Monsoon difficulty or harder."
-  else
-    unlock.description = "Kill an elite boss on Monsoon difficulty."
-  end
+    if modloader.checkMod("Starstorm") then
+        unlock.description = "Kill an elite boss on Monsoon difficulty or harder."
+    else
+        unlock.description = "Kill an elite boss on Monsoon difficulty."
+    end
 end)
 unlock.highscoreText = "\"Brainstalks\" Unlocked"
 unlock:assignUnlockable(item)
 
 callback.register("onNPCDeath", function(npc, player)
-  if not unlock:isComplete() then
-    if modloader.checkMod("Starstorm") then
-      if Difficulty.getActive() == Difficulty.find("Typhoon", "Starstorm") or Difficulty.getActive() == Difficulty.find("Monsoon", "vanilla") then
-        if npc:get("prefix_type") > 0 and npc:isBoss() then
-          unlock:increment(1)
+    if not unlock:isComplete() then
+        if modloader.checkMod("Starstorm") then
+            if Difficulty.getActive() == Difficulty.find("Typhoon", "Starstorm") or Difficulty.getActive() == Difficulty.find("Monsoon", "vanilla") then
+                if npc:get("prefix_type") > 0 and npc:isBoss() then
+                    unlock:increment(1)
+                end
+            end
+        else
+            if Difficulty.getActive() == Difficulty.find("Monsoon", "vanilla") then
+                if npc:get("prefix_type") > 0 and npc:isBoss() then
+                    unlock:increment(1)
+                end
+            end
         end
-      end
-    else
-      if Difficulty.getActive() == Difficulty.find("Monsoon", "vanilla") then
-        if npc:get("prefix_type") > 0 and npc:isBoss() then
-          unlock:increment(1)
-        end
-      end
     end
-  end
 end)

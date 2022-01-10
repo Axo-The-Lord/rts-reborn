@@ -6,8 +6,8 @@ item.sprite = Sprite.load("Items/resources/afterburner.png", 1, 12, 15)
 item:setTier("rare")
 
 item:addCallback("pickup", function(player)
-  Ability.addCharge(player, "c", 2)
-  Ability.setCooldownReduction(player, "c", Ability.getCooldownReduction(player, "c") / 3)
+    Ability.addCharge(player, "c", 2)
+    Ability.setCooldownReduction(player, "c", Ability.getCooldownReduction(player, "c") / 3)
 end)
 
 -- Item Log
@@ -22,5 +22,5 @@ item:setLog{
 
 -- Tab Menu
 if modloader.checkMod("Starstorm") then
-  TabMenu.setItemInfo(item, nil, "Add 2 charges of your third skill. Reduce third skill cooldown.", "+2 charges, further reduces cooldown.")
+    TabMenu.setItemInfo(item, nil, "Add 2 charges of your third skill. Reduce third skill cooldown.", "+2 charges, further reduces cooldown.")
 end

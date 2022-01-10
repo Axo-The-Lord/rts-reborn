@@ -10,43 +10,43 @@ local bugIcon = Sprite.load("Items/resources/bugDisplay", 1, 7, 11)
 
 -- Draw
 callback.register("onPlayerDraw", function(player)
-  if player:countItem(item) > 0 then
-    if player:get("shield") > 0 then
-      graphics.drawImage{
-        image = bugIcon,
-        x = player.x,
-      	y = player.y - (player.sprite.height / 2),
-        alpha = 0.5,
-      }
-    end
-  end
+	if player:countItem(item) > 0 then
+		if player:get("shield") > 0 then
+			graphics.drawImage{
+				image = bugIcon,
+				x = player.x,
+				y = player.y - (player.sprite.height / 2),
+				alpha = 0.5,
+			}
+		end
+	end
 end)
 
 -- Pickup
 item:addCallback("pickup", function(player)
-    local playerAc = player:getAccessor()
-  local shieldBonus = playerAc.maxhp_base * 1.5
-  playerAc.percent_hp = 1 / playerAc.maxhp_base
-  if player:countItem(item) > 1 then
-    shieldBonus = playerAc.maxhp_base / 4
-  end
-    playerAc.maxshield = playerAc.maxshield + shieldBonus
-    playerAc.shield = playerAc.maxshield
-    playerAc.shield_cooldown = 7 * 60
+		local playerAc = player:getAccessor()
+	local shieldBonus = playerAc.maxhp_base * 1.5
+	playerAc.percent_hp = 1 / playerAc.maxhp_base
+	if player:countItem(item) > 1 then
+		shieldBonus = playerAc.maxhp_base / 4
+	end
+		playerAc.maxshield = playerAc.maxshield + shieldBonus
+		playerAc.shield = playerAc.maxshield
+		playerAc.shield_cooldown = 7 * 60
 end)
 
 callback.register("onPlayerStep", function(player)
-  if player:countItem(item) > 0 then
-    if player:get("maxhp") > 1 then
-      player:getData().trueMaxHP = (player:getData().trueMaxHP or 0) + player:get("maxhp")
-      player:set("maxshield", player:get("maxshield") + ((player:get("maxhp") - 1) * 1.5))
-      player:set("shield", player:get("maxshield"))
-      player:set("maxhp_base", 1)
-    end
-  elseif player:getData().trueMaxHP then
-    player:set("maxhp_base", player:getData().trueMaxHP)
-    player:getData().trueMaxHP = nil
-  end
+	if player:countItem(item) > 0 then
+		if player:get("maxhp") > 1 then
+			player:getData().trueMaxHP = (player:getData().trueMaxHP or 0) + player:get("maxhp")
+			player:set("maxshield", player:get("maxshield") + ((player:get("maxhp") - 1) * 1.5))
+			player:set("shield", player:get("maxshield"))
+			player:set("maxhp_base", 1)
+		end
+	elseif player:getData().trueMaxHP then
+		player:set("maxhp_base", player:getData().trueMaxHP)
+		player:getData().trueMaxHP = nil
+	end
 end)
 
 -- Item Log

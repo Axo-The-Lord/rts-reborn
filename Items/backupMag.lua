@@ -6,7 +6,7 @@ item.sprite = Sprite.load("Items/resources/backupMag.png", 1, 11, 12)
 item:setTier("common")
 
 item:addCallback("pickup", function(player)
-  Ability.addCharge(player, "x", 1)
+    Ability.addCharge(player, "x", 1)
 end)
 
 -- Item Log
@@ -21,5 +21,5 @@ item:setLog{
 
 -- Tab Menu
 if modloader.checkMod("Starstorm") then
-  TabMenu.setItemInfo(item, nil, "Add 1 charge to your second skill.", "+1 charge.")
+    TabMenu.setItemInfo(item, nil, "Add 1 charge to your second skill.", "+1 charge.")
 end
