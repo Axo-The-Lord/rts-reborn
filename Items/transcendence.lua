@@ -2,11 +2,11 @@
 
 local item = Item("Transcendence")
 item.pickupText = "Convert all your health into shield. Increase maximum health."
-item.sprite = Sprite.load("Items/resources/bug.png", 1, 10, 14)
+item.sprite = Sprite.load("Items/resources/transcendence.png", 1, 10, 14)
 Lunar.addItem(item)
 item.color = LunarColor
 
-local bugIcon = Sprite.load("Items/resources/bugDisplay", 1, 7, 11)
+local bugIcon = Sprite.load("Items/resources/transcendenceDisplay", 1, 7, 11)
 
 -- Draw
 callback.register("onPlayerDraw", function(player)
