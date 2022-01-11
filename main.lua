@@ -46,6 +46,7 @@ local Items = {
   "aprounds",
   "backupMag",
   "crystal",
+  "steak",
   -- Uncommon
   "warhorn",
   "pauldron",
