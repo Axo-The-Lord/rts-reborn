@@ -54,7 +54,9 @@ registercallback("onObjectFailure", function(objectInstance, player)
 end)
 
 local budCard = Interactable.new(lunarBud, "lunarBud")
-budCard.spawnCost = 1
+--budCard.spawnCost = 1
+budCard.spawnCost = 100
+
 for _, stage in ipairs(Stage.findAll("vanilla")) do
 	stage.interactables:add(budCard)
 end

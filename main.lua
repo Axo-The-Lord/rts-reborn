@@ -56,7 +56,7 @@ local Items = {
   "deathMark",
   -- Rare
   "brainstalks",
-  "wakeOfVultures",
+  --"wakeOfVultures",
   "afterburner",
   -- Boss
   -- "planula",

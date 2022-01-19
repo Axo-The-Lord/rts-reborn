@@ -273,13 +273,16 @@ callback.register("onObjectFailure", function(objectInstance, player)
 end)
 
 local damageCard = Interactable.new(specialtyDamage, "specialtyDamage")
-damageCard.spawnCost = 65
+--damageCard.spawnCost = 65
+damageCard.spawnCost = 100
 
 local healingCard = Interactable.new(specialtyHealing, "specialtyHealing")
-healingCard.spawnCost = 65
+--healingCard.spawnCost = 65
+healingCard.spawnCost = 80
 
 local utilCard = Interactable.new(specialtyUtil, "specialtyUtil")
-utilCard.spawnCost = 65
+--utilCard.spawnCost = 65
+utilCard.spawnCost = 80
 
 for _, stage in ipairs(Stage.findAll("vanilla")) do
 	stage.interactables:add(damageCard)

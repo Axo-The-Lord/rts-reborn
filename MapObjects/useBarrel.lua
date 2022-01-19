@@ -43,7 +43,7 @@ callback.register("onObjectFailure", function(objectInstance, player)
 end)
 
 local barrelCard = Interactable.new(useBarrel, "useBarrel")
-barrelCard.spawnCost = 40
+barrelCard.spawnCost = 70
 for _, stage in ipairs(Stage.findAll("vanilla")) do
 	stage.interactables:add(barrelCard)
 end
