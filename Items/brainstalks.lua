@@ -13,11 +13,12 @@ brainBuff.sprite = Sprite.load("Items/resources/brainstalksBuff", 1, 6, 7)
 brainBuff:addCallback("start", function(player)
 	local player = net.localPlayer or misc.players[1]
 	if player:hasBuff(brainBuff) then
-		local vignette = Object.find("Vignette", "rts-reborn")
-		vignette.alpha = 0.7
-		vignette.color = Color.fromHex(0xF156FB)
-		vignette:getData().rate = 0.001
-		DrawVignette(vignette)
+		--local vignette = Object.find("Vignette", "rts-reborn")
+		--vignette.alpha = 0.7
+		--vignette.color = Color.fromHex(0xF156FB)
+		--vignette:getData().rate = 0.001
+		--DrawVignette(vignette)
+		DrawVignetteAlt(0.7,Color.fromHex(0xF156FB))
 	end
 end)
 
