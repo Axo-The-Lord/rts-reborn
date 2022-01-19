@@ -3,10 +3,11 @@
 -- CORE --
 
 local Libraries = {
+  "util",
   "abilityCharge",
   "lunar",
-  "mapObjectLib", -- This version of MapObjectLib is really old and I don't want to use it but for some reason everything breaks when I try to use the newest version aaaaaaaaaaaa
-  "util"
+  "mapObjectLib" -- This version of MapObjectLib is really old and I don't want to use it but for some reason everything breaks when I try to use the newest version aaaaaaaaaaaa
+  
 }
 for _, core in ipairs(Libraries) do
   local c = require("Core."..core)
@@ -47,6 +48,7 @@ local Items = {
   "backupMag",
   "crystal",
   "steak",
+  "raplate",
   -- Uncommon
   "warhorn",
   "pauldron",
