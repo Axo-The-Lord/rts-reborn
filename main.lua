@@ -39,6 +39,7 @@ end
 -- ACTORS --
 
 require("Actors.newt")
+require("Actors.beetle.beetle")
 
 -- ITEMS --
 
@@ -80,3 +81,4 @@ end
 -- SURVIVORS --
 
 require("survivors/artificer")
+
