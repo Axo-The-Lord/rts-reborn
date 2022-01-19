@@ -92,10 +92,11 @@ end)
 callback.register("onDraw", function()
 	local player = net.localPlayer or misc.players[1]
 	if player:hasBuff(tonicBuff) then
-		graphics.alpha(0.2)
-		graphics.color(Color.BLUE)
-		local x, y, w, h = camera.x, camera.y, camera.width, camera.height
-		graphics.rectangle(x, y, x + w, y + h, false)
+		--graphics.alpha(0.2)
+		--graphics.color(Color.BLUE)
+		--local x, y, w, h = camera.x, camera.y, camera.width, camera.height
+		--graphics.rectangle(x, y, x + w, y + h, false)
+		DrawVignetteAlt(1,Color.LIGHT_BLUE)
 	end
 end)
 
