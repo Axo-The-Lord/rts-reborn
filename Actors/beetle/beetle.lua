@@ -162,6 +162,6 @@ monsLog.statHP = 120
 monsLog.statDamage = 17
 monsLog.statSpeed = 0.5
 monsLog.sprite = animations.walk
-monsLog.portrait = Sprite.load(enemyName.." Portrait",1,0,0)
+monsLog.portrait = Sprite.load(enemyName.." Portrait",path.."portrait.png",1,239/2,239/2)
 monsLog.portraitSubimage = 1
 

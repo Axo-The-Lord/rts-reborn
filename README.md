@@ -30,18 +30,13 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 ## MISC
 
 **text**
-* I hate how this is organized and I will  probably just move it to util or something. I just don't see the need for an extra file that only handles text
-
-**vignette**
-* Probably needs rewriting or maybe I just don't know how it works
+* Could be changed to be a part of util
 
 **title**
 * Resize the titles to properly fit the main menu
 
 ## MAPOBJECTS
 
-**categoryChest**
-* Set the weight of individual items in the pool to avoid getting too many reds
 
 **lunarBud**
 * Fix the smoke effect. This could probably be a particle of its own, perhaps similar to SPEE-D's or F.A.E's.
@@ -119,9 +114,6 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 
 **Jade Elephant**
 * Proper item log?
-
-**Gorag's Opus**
-* Needs a resprite. It looks really, really bad.
 
 ## SURVIVORS
 
