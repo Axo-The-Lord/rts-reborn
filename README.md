@@ -91,7 +91,7 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 * Maybe disable it until we add obliteration? It was just a test to see if Lunar Items worked or not.
 
 **Transcendence**
-* Needs to be rewritten completely.
+* ~~Needs to be rewritten completely.~~ \~Affenstark
 * Needs proper item log?
 * Starstorm Tab Menu
 
