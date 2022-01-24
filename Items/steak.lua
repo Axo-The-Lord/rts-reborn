@@ -1,6 +1,5 @@
 local item = Item.new("Bison Steak")
 item.pickupText = "Gain 25 max health."
---Provisional Sprite!
 item.sprite = Sprite.load("Items/resources/steak.png", 1, 12, 13)
 item:setTier("common")
 
