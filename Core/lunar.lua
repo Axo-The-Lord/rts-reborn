@@ -136,6 +136,15 @@ callback.register("onNPCDeath", function(actorInstance)
 end)
 
 -- Lunar Item Handler
+local packLunarItem = net.Packet.new("RTSLunarItemRem", function(sender, itemNetId)
+	local inst = itemNetId:resolve()
+	print("inst", inst)
+	inst:set("used", 1)
+	if net.host then
+		packLunarItem:sendAsHost(net.EXCLUDE, player, itemNetId)
+	end
+end)
+
 callback.register("onItemInit", function(instance)
 	if lunar_items[instance:getItem()] == true then
 		instance:set("lunar", 1)
@@ -156,6 +165,7 @@ callback.register("onStep", function()
 		end
 		-- Track if the item is being touched
 		touching[inst] = nil
+		print(acc.used)
 		if acc.used == 0 then -- Don't allow pickups if already picked up
 			for _, player in ipairs(misc.players) do
 				if inst:collidesWith(player, inst.x, inst.y) and acc.pickupTimer <= 0 then
@@ -175,6 +185,13 @@ callback.register("onStep", function()
 							player:giveItem(instItem)
 						end
 						acc.used = 1
+						if net.online then
+							if net.host then
+								packLunarItem:sendAsHost(net.ALL, nil, inst:getNetIdentity())
+							else
+								packLunarItem:sendAsClient(inst:getNetIdentity())
+							end
+						end
 						break
 					else
 						-- This makes sure the correct button for pickup is displayed in the pickup text
@@ -182,6 +199,8 @@ callback.register("onStep", function()
 					end
 				end
 			end
+		--elseif inst:isValid() then
+		--	inst:destroy()
 		end
 	end
 end)
@@ -193,6 +212,7 @@ callback.register("onDraw", function()
 		end
 	end
 end)
+
 
 --Exports
 export("LunarCoins")
