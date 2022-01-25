@@ -109,7 +109,7 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 * It needs to use the vignette object
 
 **Effigy of Grief**
-* Add 5 maximum?
+* ~~Add 5 maximum?~~ \~Affenstark
 * Proper item log?
 
 **Jade Elephant**

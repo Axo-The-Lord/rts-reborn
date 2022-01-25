@@ -8,19 +8,21 @@ item.color = LunarColor
 item.isUseItem = true
 item.useCooldown = 15
 
-ItemPool.find("enigma", "vanilla"):add(item) -- Enigma
+ItemPool.find("enigma", "vanilla"):add(item)
 
 -- Buff
-local buff = Buff.new("Grieving")
+local buff = Buff.new("Grieving") --"Cripple"?
 buff.sprite = Sprite.load("Items/resources/effigyDebuff", 1, 5, 7)
 
 buff:addCallback("start", function(actor)
-	actor:set("armor", actor:get("armor") - 20)
-	actor:set("pHmax", actor:get("pHmax") - 0.5)
+	local acc = actor:getAccessor()
+	acc.armor = acc.armor - 20
+	acc.pHmax = acc.pHmax - 0.5
 end)
 buff:addCallback("end", function(actor)
-	actor:set("armor", actor:get("armor") + 20)
-	actor:set("pHmax", actor:get("pHmax") + 0.5)
+	local acc = actor:getAccessor()
+	acc.armor = acc.armor + 20
+	acc.pHmax = acc.pHmax + 0.5
 end)
 
 -- Object
@@ -57,9 +59,15 @@ effigyObject:addCallback("draw", function(self)
 	graphics.circle(self.x, self.y, self:get("radius"), false)
 end)
 
--- Use
+-- Item
 item:addCallback("use", function(player, embryo)
+	local pDat = player:getData()
+	if #pDat.effigy_list == 5 or false then
+		pDat.effigy_list[1]:destroy()
+		table.remove(pDat.effigy_list, 1)
+	end
 	local newEffigy = effigyObject:create(player.x, player.y)
+	pDat.effigy_list[#pDat.effigy_list+1] = newEffigy
 	if embryo then
 		newEffigy:set("radius", 100 * 1.25)
 	else
@@ -67,7 +75,6 @@ item:addCallback("use", function(player, embryo)
 	end
 end)
 
--- Item Log
 item:setLog{
 	group = "end",
 	description = "ALL characters within are &b&slowed by 50%&!& and have their &y&armor reduced to 20.&!&",
@@ -76,3 +83,7 @@ item:setLog{
 	date = "Some Date", -- Add date!
 	priority = colorString("Unaccounted For", LunarColor)
 }
+
+callback.register("onPlayerInit", function(p)
+	p:getData().effigy_list = {}
+end)
