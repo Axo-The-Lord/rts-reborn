@@ -160,14 +160,19 @@ callback.register("onStep", function()
 			for _, player in ipairs(misc.players) do
 				if inst:collidesWith(player, inst.x, inst.y) and acc.pickupTimer <= 0 then
 					if player:control("enter") == input.PRESSED then
+						local instItem = inst:getItem()
 						if acc.is_use == 1 then
-							if player.useItem ~= nil then
+							if player.useItem then
 								local item = player.useItem
 								item:create(inst.x, inst.y)
 							end
-							player.useItem = inst:getItem()
+							player.useItem = instItem
+
+							-- Activate "pickup" callback
+							player:giveItem(instItem)
+							player:removeItem(instItem)
 						else
-							player:giveItem(inst:getItem())
+							player:giveItem(instItem)
 						end
 						acc.used = 1
 						break
