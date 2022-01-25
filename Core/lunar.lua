@@ -148,27 +148,28 @@ local touching = {}
 
 callback.register("onStep", function()
 	for _, inst in ipairs(itemPO:findMatching("lunar", 1)) do
+		local acc = inst:getAccessor()
 		-- Disables normal pickups
 		inst:setAlarm(0, 10)
-		if inst:get("pickupTimer") > 0 then
-			inst:set("pickupTimer", inst:get("pickupTimer") - 1)
+		if acc.pickupTimer > 0 then
+			acc.pickupTimer = acc.pickupTimer - 1
 		end
 		-- Track if the item is being touched
 		touching[inst] = nil
-		if inst:get("used") == 0 then -- Don't allow pickups if already picked up
+		if acc.used == 0 then -- Don't allow pickups if already picked up
 			for _, player in ipairs(misc.players) do
-				if inst:collidesWith(player, inst.x, inst.y) and inst:get("pickupTimer") <= 0 then
-					if input.checkControl("enter", player) == input.PRESSED then
-						if inst:get("is_use") == 1 then
+				if inst:collidesWith(player, inst.x, inst.y) and acc.pickupTimer <= 0 then
+					if player:control("enter") == input.PRESSED then
+						if acc.is_use == 1 then
 							if player.useItem ~= nil then
 								local item = player.useItem
 								item:create(inst.x, inst.y)
 							end
 							player.useItem = inst:getItem()
-							else
-								player:giveItem(inst:getItem())
-							end
-							inst:set("used", 1)
+						else
+							player:giveItem(inst:getItem())
+						end
+						acc.used = 1
 						break
 					else
 						-- This makes sure the correct button for pickup is displayed in the pickup text
