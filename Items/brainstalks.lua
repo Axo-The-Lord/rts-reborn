@@ -22,11 +22,19 @@ callback.register("onDraw", function()
 	end
 end)
 
+-- Sparks
+local spark = ParticleType.new("Sparks")
+spark:sprite(Sprite.load("Items/resources/sparks.png", 8, 6, 4), true, true, false)
+spark:additive(true)
+spark:life(15, 15)
+spark:angle(0, 360, 0, 0, false)
+
 brainBuff:addCallback("step", function(player)
 	for i = 2, 5 do
 		if player:getAlarm(i) > 30 then
 			player:setAlarm(i, 30)
 		end
+		spark:burst("below", player.x, player.y, 1, Color.PURPLE)
 	end
 end)
 
