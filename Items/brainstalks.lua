@@ -10,7 +10,7 @@ local brainBuff = Buff.new("No Cooldowns")
 brainBuff.sprite = Sprite.load("Items/resources/brainstalksBuff", 1, 6, 7)
 
 -- Vignette
-brainBuff:addCallback("start", function(player)
+callback.register("onDraw", function()
 	local player = net.localPlayer or misc.players[1]
 	if player:hasBuff(brainBuff) then
 		--local vignette = Object.find("Vignette", "rts-reborn")

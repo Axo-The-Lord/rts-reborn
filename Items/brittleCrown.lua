@@ -1,7 +1,7 @@
 -- Brittle Crown
 local item = Item("Brittle Crown")
 item.pickupText = "Gain gold on hit... BUT lose gold on getting hit."
-item.sprite = Sprite.load("Items/resources/crown.png", 1, 12, 13)
+item.sprite = Sprite.load("Items/resources/brittleCrown.png", 1, 13, 16)
 Lunar.addItem(item)
 item.color = LunarColor
 
