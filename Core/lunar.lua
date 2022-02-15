@@ -136,14 +136,32 @@ callback.register("onNPCDeath", function(actorInstance)
 end)
 
 -- Lunar Item Handler
-local packLunarItem = net.Packet.new("RTSLunarItemRem", function(sender, itemNetId)
+local packLunarItem
+packLunarItem = net.Packet.new("RTSLunarItemSync", function(sender, itemNetId)
 	local inst = itemNetId:resolve()
+	local acc = inst:getAccessor()
+	local instItem = inst:getItem()
+	if acc.is_use == 1 then
+		if sender.useItem then
+			sender.useItem:create(inst.x, inst.y)
+		end
+		sender.useItem = instItem
+
+		-- Activate "pickup" callback
+		sender:giveItem(instItem)
+		sender:removeItem(instItem)
+	else
+		sender:giveItem(instItem)
+	end
+	acc.used = 1
+
+
 	print("inst", inst)
-	inst:set("used", 1)
 	if net.host then
-		packLunarItem:sendAsHost(net.EXCLUDE, player, itemNetId)
+		packLunarItem:sendAsHost(net.EXCLUDE, sender, itemNetId)
 	end
 end)
+
 
 callback.register("onItemInit", function(instance)
 	if lunar_items[instance:getItem()] == true then
@@ -167,14 +185,13 @@ callback.register("onStep", function()
 		touching[inst] = nil
 		print(acc.used)
 		if acc.used == 0 then -- Don't allow pickups if already picked up
-			for _, player in ipairs(misc.players) do
+			local player = misc.players[1]
 				if inst:collidesWith(player, inst.x, inst.y) and acc.pickupTimer <= 0 then
 					if player:control("enter") == input.PRESSED then
 						local instItem = inst:getItem()
 						if acc.is_use == 1 then
 							if player.useItem then
-								local item = player.useItem
-								item:create(inst.x, inst.y)
+								player.useItem:create(inst.x, inst.y)
 							end
 							player.useItem = instItem
 
@@ -192,15 +209,11 @@ callback.register("onStep", function()
 								packLunarItem:sendAsClient(inst:getNetIdentity())
 							end
 						end
-						break
 					else
 						-- This makes sure the correct button for pickup is displayed in the pickup text
 						touching[inst] = player
 					end
 				end
-			end
-		--elseif inst:isValid() then
-		--	inst:destroy()
 		end
 	end
 end)
