@@ -2,7 +2,7 @@
 
 local item = Item("Effigy of Grief")
 item.pickupText = "Drop an effigy that cripples ALL characters inside."
-item.sprite = Sprite.load("Items/resources/effigy.png", 2, 10, 17)
+item.sprite = Sprite.load("Items/resources/griefEffigy.png", 2, 10, 16)
 Lunar.addItem(item)
 item.color = LunarColor
 item.isUseItem = true

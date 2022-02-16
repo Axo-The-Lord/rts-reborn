@@ -2,7 +2,7 @@
 
 local item = Item("Shaped Glass")
 item.pickupText = "Double your damage... BUT halve your health."
-item.sprite = Sprite.load("Items/resources/shapedGlass.png", 1, 12, 13)
+item.sprite = Sprite.load("Items/resources/shapedGlass.png", 1, 15, 15)
 Lunar.addItem(item)
 item.color = LunarColor
 
