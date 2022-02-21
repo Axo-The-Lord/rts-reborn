@@ -106,7 +106,7 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 **Spinel Tonic**
 * Needs to be rewritten completely.
 * ~~Proper item log?~~ \~Affenstark
-* It needs to use the vignette object
+* ~~It needs to use the vignette object~~
 
 **Effigy of Grief**
 * ~~Add 5 maximum?~~ \~Affenstark
@@ -142,4 +142,4 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 
 * Icon needs text
 * Rainfusion Description needs finalizing
-* Remove stupid .DS_Store who uses MacOS anyway amirite
+* ~~Remove stupid .DS_Store who uses MacOS anyway amirite~~
