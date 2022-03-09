@@ -56,3 +56,65 @@ function contains(t, value)
 		return false
 	end
 end
+
+--and THESE are a few inherited functions from starstorm -
+--PosToAngle
+--AngleDif
+--ColorString
+--syncControlRelease
+
+-- PosToAngle
+function posToAngle(x1, y1, x2, y2, rad)
+	local deltaX = x2 - x1
+	local deltaY = y1 - y2
+	local result = math.atan2(deltaY, deltaX)
+	
+	if not rad then
+		result = math.deg(result)
+	end
+	
+	return result
+end
+
+-- Angledif
+function angleDif(current, target)
+  return ((((current - target) % 360) + 540) % 360) - 180
+end
+
+-- Color String
+function colorString(str, color)
+    return "&" .. tostring(color.gml) .. "&" .. str .. "&!&"
+end
+
+--syncControlRelease
+local syncInputRelease
+syncInputRelease = net.Packet.new("SSInputRel", function(sender, player, key)
+	local playerI = player:resolve()
+	if playerI and playerI:isValid() and key then
+		playerI:getData()._keyRelease = key
+	end
+	if net.host then
+		syncInputRelease:sendAsHost(net.EXCLUDE, sender, player, key)
+	end
+end)
+function syncControlRelease(player, control)
+	if player:control(control) == input.RELEASED then
+		if net.online and net.localPlayer == player then
+			if net.host then
+				syncInputRelease:sendAsHost(net.ALL, nil, player:getNetIdentity(), control)
+			else
+				syncInputRelease:sendAsClient(player:getNetIdentity(), control)
+			end
+		end
+			
+		return true
+		
+	elseif player:getData()._keyRelease == control then
+		player:getData()._keyRelease = nil
+		
+		return true
+	else
+	
+		return false
+	end
+end
