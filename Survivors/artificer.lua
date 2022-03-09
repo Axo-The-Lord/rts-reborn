@@ -66,12 +66,12 @@ end)
 arti:addCallback("init", function(player)
 	Ability.addCharge(player, "z", 3) -- 4 flame bolts
 	player:setAnimations(baseSprites)
-	player:survivorSetInitialStats(110, 12, 0.017)
+	player:survivorSetInitialStats(100, 12, 0.01)
 	player:setSkill(1,
 		"Flame Bolt",
 		"Fire a bolt for 220% damage that ignites enemies. Hold up to 4.",
 		sprSkills, 1,
-		1 * 60
+		1.3 * 60
 	)
 	player:setSkill(2,
 		"Charged Nano-Bomb",
@@ -94,7 +94,7 @@ arti:addCallback("init", function(player)
 end)
 
 arti:addCallback("levelUp", function(player)
-	player:survivorLevelUpStats(33, 2.4, 0.003, 20)
+	player:survivorLevelUpStats(32, 2.5, 0.002, 2)
 end)
 
 arti:addCallback("useSkill", function(player, skill)
