@@ -136,9 +136,10 @@ envParticle:life(30, 30)
 envParticle:speed(1, 1, 0, 0)
 envParticle:direction(270, 270, 0, 0)
 
-callback.register("onPlayerStep", function(player)
+arti:addCallback("step", function(player)
 	local playerData = player:getData()
-	if player:getSurvivor() == arti then
+	--if player:getSurvivor() == arti then
+		--[[
 		if playerData.geyser then
 			if player:collidesWith(Object.find("Geyser","vanilla"), player.x, player.y) and playerData.geyser <= 0 then
 				playerData.geyser = 30
@@ -149,13 +150,23 @@ callback.register("onPlayerStep", function(player)
 		else
 			playerData.geyser = 0
 		end
-		if player:get("activity") ~= 30 and player:get("moveUpHold") == 1 and player:get("free") == 1 and playerData.geyser <= 0 then
-			playerData.envSuit = playerData.envSuit + 1
+		]]
+		local photonCheck = true
+		local photonOffset = 0
+		if player:get("jetpack") > 0 then
+			if player:get("jetpack_fuel") ~= 0 then
+				photonCheck = false
+			end
+			photonOffset = 4
+		end
+		if player:get("activity") ~= 30 and player:get("moveUpHold") == 1 and player:get("free") == 1 and player:get("pVspeed") >= -player:get("pVmax") and photonCheck--[[playerData.geyser <= 0]] then
+			playerData.envSuit = playerData.envSuit + 1 + photonOffset
 			if playerData.envSuit == 15 then
 				sndEnvSuit:play(0.8 + math.random() * 0.2, 0.7)
 			end
 			if playerData.envSuit >= 15 then
 				player:set("pVspeed", 0)
+				player:set("jetpack_cd", 20)
 				if playerData.envSuit % 5 == 0 then
 					envParticle:burst("middle", player.x - (2 * player.xscale), player.y, 1)
 					envParticle:burst("middle", player.x + (1 * player.xscale), player.y, 1)
@@ -165,7 +176,7 @@ callback.register("onPlayerStep", function(player)
 		else
 			playerData.envSuit = 0
 		end
-	end
+	--end
 end)
 
 -- Ignite (Debuff)
