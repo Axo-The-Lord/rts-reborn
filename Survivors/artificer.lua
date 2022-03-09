@@ -377,6 +377,25 @@ objNanoBomb:addCallback("draw", function(self)
 	end
 end)
 
+--freeze debuff
+local freezeDebuff = Buff.new("Frozen")
+freezeDebuff:addCallback("step", function(actor)
+	if actor and actor:isValid() then
+		actor:set("z_skill", 0)
+		actor:set("x_skill", 0)
+		actor:set("c_skill", 0)
+		actor:set("v_skill", 0)
+		actor:set("moveLeft", 0)
+		actor:set("moveRight", 0)
+		actor:set("moveUp", 0)
+		actor:set("moveUpHold", 0)
+		if actor:get("hp") <= actor:get("maxhp")/3 then
+			--play special kill effect
+			actor:kill()
+		end
+	end
+end)
+
 -- ice object
 local objIce = Object.new("ArtificerIceObject")
 local iceMask = Sprite.load("ArtificerIceMask", path.."iceMask", 1, 0, 0)
@@ -424,9 +443,12 @@ objIce:addCallback("step", function(self)
 			local r = 20
 			local actors = ParentObject.find("actors"):findAllEllipse(self.x - r, self.y - r, self.x + r, self.y + r)
 			for _, actor in ipairs(actors) do
-				if actor:isValid() and not actor:getData().hitIce and actor:get("team") ~= selfData.parent:get("team") then
-					selfData.parent:fireBullet(self.x, self.y, 0, 1, 1):set("specific_target", actor.id)
+				if actor:isValid() and actor:get("team") ~= selfData.parent:get("team") and not actor:hasBuff(freezeDebuff) then
+					local bullet = selfData.parent:fireBullet(self.x, self.y, 0, 1, 1):set("specific_target", actor.id)
 					actor:getData().hitIce = 40
+					bullet:getData().doFreeze = 3*60
+					bullet:set("stun", 0.33)
+					selfData.life = 1
 				end
 			end
 		end
@@ -440,6 +462,16 @@ objIce:addCallback("step", function(self)
 
 	if self:isValid() and self.sprite == iceSpriteDeath and self.subimage > self.sprite.frames - 1 then
 		self:destroy()
+	end
+end)
+
+--freeze application
+callback.register("preHit", function(damager, hit)
+	local parent = damager:getParent()
+	if parent and parent:isValid() and hit and hit:isValid() then
+		if damager:getData().doFreeze then
+			hit:applyBuff(freezeDebuff, damager:getData().doFreeze)
+		end
 	end
 end)
 
