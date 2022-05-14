@@ -8,7 +8,7 @@ item.color = LunarColor
 
 item:addCallback("pickup", function(player)
 	local playerAc = player:getAccessor()
-	playerAc.maxhp_base = playerAc.percent_hp / 2
+	playerAc.maxhp_base = playerAc.maxhp_base / 2
 	playerAc.damage = playerAc.damage * 2
 	playerAc.hud_health_color = Color.fromHex(0xAF74C9).gml
 end)

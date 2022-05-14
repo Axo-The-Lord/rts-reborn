@@ -15,6 +15,10 @@ local animations = {
     palette=sprPalette
 }
 
+local sndShoot1 = Sound.load("BeetleShoot1", path.."shoot1.ogg")
+local sndDeath = Sound.load("BeetleDeath", path.."death.ogg")
+local sndSpawn = Sound.load("BeetleSpawn", path.."spawn.ogg")
+
 local beetle = Object.base("EnemyClassic", enemyName)
 beetle.sprite = animations.idle
 
@@ -30,13 +34,12 @@ NPC.setSkill(beetle, 1, 25, 60 * 2, animations.shoot1, 0.25, function(actor)
 			actor.xscale = math.abs(actor.xscale) * -1
 		end
 	end
-	--sCharge:play(0.9 + math.random() * 0.2)
 end, function(actor, relevantFrame)
 	local actorData = actor:getData()
 	if relevantFrame == 8 then
 		local target = Object.findInstance(actor:get("target"))
 		actor:fireExplosion(actor.x + (5 * actor.xscale), actor.y, 1, 1, 2, nil, nil, nil)
-		--sShoot:play(0.9 + math.random() * 0.2)
+		sndShoot1:play(0.9 + math.random() * 0.2)
 	end
 end)
 
@@ -53,16 +56,16 @@ beetle:addCallback("create", function(self)
 	selfAc.exp_worth = 20 * Difficulty.getScaling()
 	selfAc.can_drop = 0
 	selfAc.can_jump = 0
-	--selfAc.sound_hit = sHit.id
+	selfAc.sound_hit = Sound.find("MushHit","vanilla").id
 	selfAc.hit_pitch = 1
-	--selfAc.sound_death = sDeath.id
+	selfAc.sound_death = sndDeath.id
     for key,val in pairs(animations) do
         self:setAnimation(key, val)
     end
 end)
 
 beetle:addCallback("step", function(self)
-    local selfAc = self:getAccessor() 
+    local selfAc = self:getAccessor()
     local object = self:getObject()
     local selfData = self:getData()
     local activity = selfAc.activity
@@ -134,7 +137,7 @@ end)
 local card = MonsterCard.new(enemyName, beetle)
 card.type = "classic"
 card.cost = 8
---card.sound = sSpawn
+card.sound = sndSpawn
 card.sprite = animations.spawn
 card.isBoss = false
 card.canBlight = true
@@ -164,4 +167,3 @@ monsLog.statSpeed = 0.5
 monsLog.sprite = animations.walk
 monsLog.portrait = Sprite.load(enemyName.." Portrait",path.."portrait.png",1,239/2,239/2)
 monsLog.portraitSubimage = 1
-

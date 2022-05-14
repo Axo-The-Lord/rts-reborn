@@ -54,4 +54,10 @@ newt:addCallback("step", function(actor)
 		actor:setAlarm(2, 6*60)
 		return
 	end
+	local player = Object.find("P", "vanilla"):findNearest(actor.x, actor.y)
+	if player.x > actor.x then
+		actor.xscale = 1
+	else
+		actor.xscale = -1
+	end
 end)
