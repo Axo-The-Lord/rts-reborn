@@ -13,11 +13,6 @@ brainBuff.sprite = Sprite.load("Items/resources/brainstalksBuff", 1, 6, 7)
 callback.register("onDraw", function()
 	local player = net.localPlayer or misc.players[1]
 	if player:hasBuff(brainBuff) then
-		--local vignette = Object.find("Vignette", "rts-reborn")
-		--vignette.alpha = 0.7
-		--vignette.color = Color.fromHex(0xF156FB)
-		--vignette:getData().rate = 0.001
-		--DrawVignette(vignette)
 		DrawVignetteAlt(0.7,Color.fromHex(0xF156FB))
 	end
 end)
@@ -63,7 +58,7 @@ if modloader.checkMod("Starstorm") then
 end
 
 -- Achievement
-local unlock = Achievement.new("Deicide")
+local unlock = Achievement.new("brainstalks")
 unlock.requirement = 1
 unlock.deathReset = false
 unlock.unlockText = "This item will now drop."

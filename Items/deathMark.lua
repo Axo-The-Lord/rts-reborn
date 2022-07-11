@@ -48,7 +48,6 @@ callback.register("onHit", function(damager, hit)
 					debuffCount = debuffCount + 1
 				end
 			end
-			print(debuffCount)
 			if debuffCount >= 4 then
 				hit:applyBuff(deathmark, 60 * (7 * parent:countItem(item)))
 			end

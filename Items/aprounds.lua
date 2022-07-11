@@ -33,3 +33,19 @@ item:setLog{
 if modloader.checkMod("Starstorm") then
 	TabMenu.setItemInfo(item, nil, "Deal 20% extra damage to bosses.", "+20% damage.")
 end
+
+-- Achievement
+local unlock = Achievement.new("aprounds")
+unlock.requirement = 1
+unlock.deathReset = false
+unlock.unlockText = "This item will now drop."
+unlock.description = "Complete a teleporter event."
+unlock.highscoreText = "\"Armor-Piercing Rounds\" Unlocked"
+unlock:assignUnlockable(item)
+
+callback.register("onStep", function()
+	local tele = Object.find("Teleporter", "vanilla")
+	if #tele:findMatchingOp("active", ">=", 2) > 0 then
+		unlock:increment(1)
+	end
+end)

@@ -11,7 +11,7 @@ local useBarrel = MapObject.new({
 	costIncrease = 0,
 	mask = Sprite.load("MapObjects/resources/barrelMask.png", 1, 3, 13),
 	activeText = "&y& $&$& &!&", -- Nonsense, I know
-	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to open Equipment Barrel&!&&y&($&$&)&!&",
+	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to open Equipment Barrel&!& &y&($&$&)&!&",
 	maxUses = 1,
 	triggerFireworks = true
 })
@@ -42,6 +42,19 @@ callback.register("onObjectFailure", function(objectInstance, player)
 	end
 end)
 
+-- Stages
+local stageBlacklist = {}
+if modloader.checkMod("Starstorm") then
+	table.insert(stageBlacklist, Stage.find("The Void", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("The Void Shop", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Void Gates", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Void Paths", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Void End", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("The Red Plane", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("The Unknown", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Mount of the Goats", "Starstorm"))
+end
+
 local barrelCard = Interactable.new(useBarrel, "useBarrel")
 barrelCard.spawnCost = 70
 for _, stage in ipairs(Stage.findAll("vanilla")) do
@@ -49,6 +62,8 @@ for _, stage in ipairs(Stage.findAll("vanilla")) do
 end
 if modloader.checkMod("Starstorm") then
 	for _, ss_stage in ipairs(Stage.findAll("Starstorm")) do
-		ss_stage.interactables:add(barrelCard)
+		if not contains(stageBlacklist, ss_stage) then
+			ss_stage.interactables:add(barrelCard)
+		end
 	end
 end

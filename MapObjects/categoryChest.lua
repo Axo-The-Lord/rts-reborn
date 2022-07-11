@@ -100,7 +100,7 @@ local specialtyDamage = MapObject.new({
 	affectedByDirector = true,
 	affectPurchases = true,
 	mask = sprites.mask,
-	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to purchase Damage Chest&!&&y&($&$&)&!&",
+	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to purchase Damage Chest&!& &y&($&$&)&!&",
 	activeText = "&y& $&$& &!&",
 	maxUses = 1,
 	triggerFireworks = true
@@ -144,7 +144,7 @@ local specialtyHealing = MapObject.new({
 	affectedByDirector = true,
 	affectPurchases = true,
 	mask = sprites.mask,
-	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to purchase Healing Chest&!&&y&($&$&)&!&",
+	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to purchase Healing Chest&!& &y&($&$&)&!&",
 	activeText = "&y& $&$& &!&",
 	maxUses = 1,
 	triggerFireworks = true
@@ -222,7 +222,7 @@ local specialtyUtil = MapObject.new({
 	affectedByDirector = true,
 	affectPurchases = true,
 	mask = sprites.mask,
-	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to purchase Utility Chest&!&&y&($&$&)&!&",
+	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to purchase Utility Chest&!& &y&($&$&)&!&",
 	activeText = "&y& $&$& &!&",
 	maxUses = 1,
 	triggerFireworks = true
@@ -258,9 +258,9 @@ callback.register("onObjectActivated", function(objectInstance, frame, player, x
 			end
 			if net.host then
 				local item = pool:roll()
-				item:create(objectInstance.x, objectInstance.y - (2*objectInstance.sprite.height))
+				item:create(objectInstance.x, objectInstance.y - objectInstance.sprite.height)
 				if net.online then
-					SyncChest:sendAsHost("all", nil, objectInstance.x, objectInstance.y - (2*objectInstance.sprite.height), item:getObject():getName())
+					SyncChest:sendAsHost("all", nil, objectInstance.x, objectInstance.y - objectInstance.sprite.height, item:getObject():getName())
 				end
 			end
 		end
@@ -273,16 +273,26 @@ callback.register("onObjectFailure", function(objectInstance, player)
 end)
 
 local damageCard = Interactable.new(specialtyDamage, "specialtyDamage")
---damageCard.spawnCost = 65
 damageCard.spawnCost = 100
 
 local healingCard = Interactable.new(specialtyHealing, "specialtyHealing")
---healingCard.spawnCost = 65
-healingCard.spawnCost = 80
+healingCard.spawnCost = 100
 
 local utilCard = Interactable.new(specialtyUtil, "specialtyUtil")
---utilCard.spawnCost = 65
-utilCard.spawnCost = 80
+utilCard.spawnCost = 100
+
+-- Stages
+local stageBlacklist = {}
+if modloader.checkMod("Starstorm") then
+	table.insert(stageBlacklist, Stage.find("The Void", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("The Void Shop", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Void Gates", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Void Paths", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Void End", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("The Red Plane", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("The Unknown", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Mount of the Goats", "Starstorm"))
+end
 
 for _, stage in ipairs(Stage.findAll("vanilla")) do
 	stage.interactables:add(damageCard)
@@ -291,8 +301,10 @@ for _, stage in ipairs(Stage.findAll("vanilla")) do
 end
 if modloader.checkMod("Starstorm") then
 	for _, ss_stage in ipairs(Stage.findAll("Starstorm")) do
-		ss_stage.interactables:add(damageCard)
-		ss_stage.interactables:add(healingCard)
-		ss_stage.interactables:add(utilCard)
+		if not contains(stageBlacklist, ss_stage) then
+			ss_stage.interactables:add(damageCard)
+			ss_stage.interactables:add(healingCard)
+			ss_stage.interactables:add(utilCard)
+		end
 	end
 end

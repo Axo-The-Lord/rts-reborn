@@ -14,7 +14,7 @@ local lunarBud = MapObject.new({
 	costIncrease = 1,
 	mask = Sprite.load("budMask", "MapObjects/resources/budMask", 4, 3, 17),
 	activeText = "&"..color.."&&$& LUNAR&!&",
-	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to open Lunar Bud&!&&y&(&$& Lunar)&!&",
+	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to open Lunar Bud&!& &y&(&$& Lunar)&!&",
 	maxUses = 1,
 	triggerFireworks = true
 })
@@ -33,13 +33,13 @@ registercallback("onObjectActivated", function(objectInstance, frame, player, x,
 		elseif frame == 4 then
 			local pool = ItemPool.find("lunar", "rts-reborn")
 			if Artifact.find("Command") and Artifact.find("Command").active then
-				local crate = pool:getCrate():create(objectInstance.x, objectInstance.y + 3)
+				local crate = pool:getCrate():create(objectInstance.x, objectInstance.y - objectInstance.sprite.height)
 			else
 				if net.host then
 					local item = pool:roll()
-					item:create(objectInstance.x, objectInstance.y - 20)
+					item:create(objectInstance.x, objectInstance.y - objectInstance.sprite.height)
 					if net.online then
-						SyncChest:sendAsHost("all", nil, objectInstance.x, objectInstance.y - (2 * objectInstance.sprite.height), item:getObject():getName())
+						SyncChest:sendAsHost("all", nil, objectInstance.x, objectInstance.y - objectInstance.sprite.height, item:getObject():getName())
 					end
 				end
 			end
@@ -53,15 +53,29 @@ registercallback("onObjectFailure", function(objectInstance, player)
 	end
 end)
 
+-- Stages
+local stageBlacklist = {}
+if modloader.checkMod("Starstorm") then
+	table.insert(stageBlacklist, Stage.find("The Void", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("The Void Shop", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Void Gates", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Void Paths", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Void End", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("The Red Plane", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("The Unknown", "Starstorm"))
+	table.insert(stageBlacklist, Stage.find("Mount of the Goats", "Starstorm"))
+end
+
 local budCard = Interactable.new(lunarBud, "lunarBud")
---budCard.spawnCost = 1
-budCard.spawnCost = 100
+budCard.spawnCost = 175
 
 for _, stage in ipairs(Stage.findAll("vanilla")) do
 	stage.interactables:add(budCard)
 end
 if modloader.checkMod("Starstorm") then
 	for _, ss_stage in ipairs(Stage.findAll("Starstorm")) do
-		ss_stage.interactables:add(budCard)
+		if not contains(stageBlacklist, ss_stage) then
+			ss_stage.interactables:add(budCard)
+		end
 	end
 end

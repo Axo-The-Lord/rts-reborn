@@ -19,7 +19,7 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 * Properly change UI when Starstorm is enabled
 
 **mapObjectLib**
-* Someone talented should totally rewrite this. I know it's a massive undertaking, and it *does* work, but not very well.
+* Someone talented should rewrite this?? I know it's a massive undertaking, and it *does* work, but not very well.
 
 **util**
 * This is basically where you can dump any functions you may need for development. It only has like 2 things in there right now because I've never needed to use anything else, but if you need some function from a Starstorm library or something, go ahead and add it.
@@ -33,10 +33,12 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 * Could be changed to be a part of util
 
 **title**
-* Resize the titles to properly fit the main menu
+* Could use a lot of tweaking, sprite- and placement-wise
 
 ## MAPOBJECTS
 
+**categoryChest**
+* Command functionality not implemented
 
 **lunarBud**
 * Fix the smoke effect. This could probably be a particle of its own, perhaps similar to SPEE-D's or F.A.E's.
@@ -60,86 +62,26 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 * Make the Newt "spawn" once you are within a certain radius of him
 * Make the Newt close off the Bazaar for the rest of the run if he banishes you
 * Make all Lunar mapObjects free (minus cauldrons) if you kill him
-* Make the Newt turn around to see the player when they walk to the other side of him
 
 ## ITEMS
 
-**Focus Crystal**
-* Is the sound too loud?
-
-**Rose Buckler**
-* Does being able to switch directions without removing the effect make it too powerful?
-
 **Death Mark**
 * Needs a visual effect, I was thinking something similar to Seraph's shatter effect?
+* Effectiveness / balancing should be discussed.
 
-**Brainstalks**
-* Still needs the lightning particle effect
-* Vignette is not working properly
-
-**Wake of Vultures**
-* Fix the current color overlays
-* Add more elite abilities such as shooting missiles, healing, etc. How are they triggered?
-* Add support for Starstorm elites
-* Might have to be postponed to the next update? It's pretty ambitious
-
-**Planula**
-* I don't see a point in keeping this item if you can only access it through Command. It's been disabled but the code is still there.
-
-**Beads of Fealty**
-* Needs proper item log?
-* Maybe disable it until we add obliteration? It was just a test to see if Lunar Items worked or not.
-
-**Transcendence**
-* ~~Needs to be rewritten completely.~~ \~Affenstark
-* Needs proper item log?
-* Starstorm Tab Menu
-
-~~**Brittle Crown**~~ \~Affenstark
-* ~~Proper item log?~~
-* ~~Maybe making actual coins come out of the enemy instead of some damage number, similar to the money bag equipment~~
-
-**Shaped Glass**
-* Proper item log?
-* It's also broken rn (in a bad way)
+**Brittle Crown**
+* Give the coin objects some kind of momentum?
 
 **Spinel Tonic**
-* Needs to be rewritten completely.
-* ~~Proper item log?~~ \~Affenstark
-* ~~It needs to use the vignette object~~
-
-**Effigy of Grief**
-* ~~Add 5 maximum?~~ \~Affenstark
-* Proper item log?
-
-**Jade Elephant**
-* Proper item log?
+* Stat changes need to be rewritten completely.
 
 ## SURVIVORS
 
 **Artificer**
-* Sprites needed: death, decoy, select, shoot1_down, shoot2_charge, shoot2_fire, shoot3, shoot5_1, shoot5_2, shoot5_3, efFireyScepter, skills
-* Resprites(?): jump, iceIdle, iceDeath, iceSpawn, nanoBomb
-* Proper ENV Suit sound
-* Sounds for the ice spikes
-* Nano-bomb sounds
-* ENV Suit doesn't work correctly with Photon Jetpack
-* Ignite stacking needs to be handled better
-* Flamethrower needs to be reworked
-* Needs Secondary and Utility
-* Stitch fire trail to walk
-* Rewrite the special as it is currently horrible
-* Should the flame bolts be aimed at a 45-degree angle instead of straight down when hovering?
-* Should the hitbox of the flame bolt change at all?
+* A lot of stuff, I'll figure out exactly what we need as we go.
 
 ## STAGES
 
 **Bazaar Between Time**
 * Needs a tileset
 * Basically not started at all
-
-## Other
-
-* Icon needs text
-* Rainfusion Description needs finalizing
-* ~~Remove stupid .DS_Store who uses MacOS anyway amirite~~

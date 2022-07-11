@@ -6,11 +6,25 @@ item.sprite = Sprite.load("Items/resources/shapedGlass.png", 1, 15, 15)
 Lunar.addItem(item)
 item.color = LunarColor
 
+-- Health reduction
 item:addCallback("pickup", function(player)
 	local playerAc = player:getAccessor()
-	playerAc.maxhp_base = playerAc.maxhp_base / 2
-	playerAc.damage = playerAc.damage * 2
+	playerAc.percent_hp = playerAc.percent_hp / 2
 	playerAc.hud_health_color = Color.fromHex(0xAF74C9).gml
+end)
+
+-- Damage boost is applied on hit
+callback.register("preHit", function(damager)
+	local parent = damager:getParent()
+	if isa(parent, "PlayerInstance") then
+		local stack = parent:countItem(item)
+		if stack > 0 then
+			damager:set("damage", damager:get("damage") * 2 ^ stack)
+			if misc.getOption("video.show_damage") == true then
+				damager:set("damage_fake", damager:get("damage_fake") * 2 ^ stack)
+			end
+		end
+	end
 end)
 
 -- Item Log

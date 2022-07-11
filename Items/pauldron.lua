@@ -2,7 +2,7 @@
 
 local item = Item("Bezerker\'s Pauldron")
 item.pickupText = "Enter a frenzy after killing 3 enemies in quick succession."
-item.sprite = Sprite.load("Items/resources/pauldron.png", 1, 12, 13)
+item.sprite = Sprite.load("Items/resources/pauldron.png", 1, 13, 15)
 item:setTier("uncommon")
 
 -- Buff
@@ -79,3 +79,21 @@ item:setLog{
 if modloader.checkMod("Starstorm") then
 	TabMenu.setItemInfo(item, nil, "Killing 3 enemies within 1 second incrases movement and attack speed for 6 seconds.", "+4 seconds.")
 end
+
+-- Achievement
+local unlock = Achievement.new("pauldron")
+unlock.requirement = 1
+unlock.deathReset = false
+unlock.unlockText = "This item will now drop."
+unlock.description = "Charge the teleporter with less than 10% health."
+unlock.highscoreText = "\"Armor-Piercing Rounds\" Unlocked"
+unlock:assignUnlockable(item)
+
+callback.register("onPlayerStep", function(player)
+	local tele = Object.find("Teleporter", "vanilla")
+	if #tele:findMatchingOp("active", ">=", 2) > 0 then
+		if player:get("hp") < player:get("maxhp") * 0.1 then
+			unlock:increment(1)
+		end
+	end
+end)

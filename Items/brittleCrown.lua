@@ -18,10 +18,7 @@ callback.register("onDamage", function(hit, damage)
 			if not net.online or net.localPlayer == player then
 				misc.setGold(math.max(misc.getGold() - goldLoss, 0))
 			end
-				sound:play(0.8 * math.random() * 0.4)
-			if misc.getOption("video.show_damage") then
-				CreateDamageText("-"..math.round(goldLoss), player.x - 12, player.y - 12, Color.ROR_YELLOW)
-			end
+			sound:play(0.8 * math.random() * 0.4)
 		end
 	end
 end)
@@ -46,8 +43,8 @@ item:setLog{
 	group = "end",
 	description = "&b&30% chance on hit&!& to gain &b&2 gold. Scales over time.&!& &r&Lose gold&!& on taking damage: &r&100%&!& of the &r&maximum health percentage you lost.&!&",
 	story = "A wretched carnival.\n\nThey were doomed for good reason. Dunepeople of Aphelia: lost, in fanatic worship of parasitic influences. Lemurians: destined to a dead planet, picked clean. Chitin beasts. Automations of death. Why do you bring them home? They were not meant to survive.\n\nI have watched you for ages, from my dead rock - and every century, you disgust me with vanity. You invite vermin into your home. Wretches. Rats. Monsters. Creatures without restraint. Each and every one, planet killers. And yet, you entertain them as guests. Like children, requiring saving and protection.\n\nShe should have died for me. Her gift was wasted on you.\n\nAnd when will we open discussion - dear brother - of all your thin lies? Why do you forbid your guests to leave? To pilot? Why do you fashion great walls and gates? Why do you weave constructs of destruction, if your role is protection? They are entries in your collection. You slaver. Gatekeeper. Hoarder.\n\nYour death is fated. When you die - and you WILL die - I will be ready. I have been patient for millennia. That planet... is mine.",
-	destination = "Some Place", -- Add destination!
-	date = "Some Date", -- Add date!
+	destination = "???",
+	date = "???",
 	priority = colorString("Unaccounted For", LunarColor)
 }
 

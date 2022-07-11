@@ -9,8 +9,8 @@ if not modloader.checkFlag("rts_classic_meteorite") then
 	meteorite:setLog{
 		group = "end",
 		story = "What a... peculiar piece of the stars that serendipity has brought us. I\'m sure you can make more. The ratios are simple. It should be quite fun.",
-		destination = "Some Place", -- Add Destination!
-		date = "Some Date", -- Add Date!
+		destination = "???",
+		date = "???",
 		priority = colorString("Unaccounted For", LunarColor)
 	}
 	Lunar.addItem(meteorite)

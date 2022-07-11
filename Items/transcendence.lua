@@ -67,6 +67,7 @@ callback.register("onPlayerStep", function(player)
 	end
 end)
 
+-- Item Log
 item:setLog{
 	group = "end",
 	description = "&g&convert&!& all but &g&1 health&!& into &b&regenerating shields.&!& &g&Gain 50%&!& &g&maximum health.&!&",
@@ -75,3 +76,8 @@ item:setLog{
 	date = "Some Date", -- Add date!
 	priority = colorString("Unaccounted For", LunarColor)
 }
+
+-- Tab menu
+if modloader.checkMod("Starstorm") then
+	TabMenu.setItemInfo(item, nil, "Convert all health into shield, gain 50% maximum health.", "+25% health.")
+end
