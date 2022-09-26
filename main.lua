@@ -6,6 +6,7 @@ local Libraries = {
   "util",
   "abilityCharge",
   "lunar",
+  "barrier",
   "mapObjectLib" -- This version of MapObjectLib is really old and I don't want to use it but for some reason everything breaks when I try to use the newest version aaaaaaaaaaaa
 
 }
