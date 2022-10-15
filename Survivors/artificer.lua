@@ -286,19 +286,31 @@ objNanoBomb:addCallback("create", function(self)
 	self.mask = boltMask
 	self.angle = 0
 	selfData.charge = 0
+	selfData.gravity = 0.015
+	selfData.vSpeed = 0
+	selfData.team = "player"
+	selfData.damage = 12
+	self.sprite = Sprite.find("Nothing")
+	self.mask = Sprite.find("Pixel")
 end)
 objNanoBomb:addCallback("step", function(self)
 	local selfData = self:getData()
 
 	self.x = self.x + math.cos(math.rad(selfData.direction)) * 2
-	self.y = self.y - math.sin(math.rad(selfData.direction)) * 1.5
+	self.y = self.y - math.sin(math.rad(selfData.direction)) * 2
 
-	self.angle = selfData.direction
-	selfData.direction = selfData.direction - angleDif(selfData.direction, 270) * 0.01
+	--self.angle = selfData.direction
+	--selfData.direction = selfData.direction - angleDif(selfData.direction, 270) * 0.01
+	self.y = self.y + selfData.vSpeed
+	selfData.vSpeed = selfData.vSpeed + selfData.gravity
 
 	if self:collidesMap(self.x, self.y) or selfData.life == 0 then
 		if selfData.parent then
-			selfData.parent:fireExplosion(self.x, self.y, 20/19, 20/4, 5)
+			selfData.parent:fireExplosion(self.x, self.y, 30/19, 30/4, 2)
+			for i = 1, 3 do
+				Object.find("ChainLightning"):create(self.x, self.y):set("parent", selfData.parent.id):set("team", selfData.team):set("damage", selfData.damage):set("bounce", 2)
+			end
+			Sound.find("ChainLightning"):play((0.9 / self.xscale) + math.random() * 0.2)
 		end
 		self:destroy()
 	else
@@ -310,7 +322,11 @@ objNanoBomb:addCallback("step", function(self)
 		local actors = ParentObject.find("actors"):findAllEllipse(self.x - r, self.y - r, self.x + r, self.y + r)
 		for _, actor in ipairs(actors) do
 			if self:collidesWith(actor, self.x, self.y) and actor:get("team") ~= selfData.parent:get("team") then
-				selfData.parent:fireExplosion(self.x, self.y, 20/19, 20/4, 2)
+				selfData.parent:fireExplosion(self.x, self.y, 30/19, 30/4, 2)
+				for i = 1, 3 do
+					Object.find("ChainLightning"):create(self.x, self.y):set("parent", selfData.parent.id):set("team", selfData.team):set("damage", selfData.damage):set("bounce", 2)
+				end
+				Sound.find("ChainLightning"):play((0.9 / self.xscale) + math.random() * 0.2)
 				self:destroy()
 				break
 			end
@@ -319,7 +335,7 @@ objNanoBomb:addCallback("step", function(self)
 
 	if self:isValid() and selfData.parent and selfData.charge > 6 and selfData.life % 20 == 0 then
 		selfData.targets = {}
-		local r = 100
+		local r = 70 * self.xscale
 		local actors = ParentObject.find("actors"):findAllEllipse(self.x - r, self.y - r, self.x + r, self.y + r)
 		for _, actor in ipairs(actors) do
 			if actor:get("team") ~= selfData.parent:get("team") then
@@ -336,7 +352,14 @@ objNanoBomb:addCallback("step", function(self)
 end)
 objNanoBomb:addCallback("draw", function(self)
 	local selfData = self:getData()
-
+	
+	graphics.alpha(1)
+	graphics.color(Color.fromHex(0x7EB7FF))
+	graphics.circle(self.x, self.y, 2 + self.xscale * 3 + math.random(3), false)
+	graphics.alpha(1)
+	graphics.color(Color.fromHex(0x0014A9))
+	graphics.circle(self.x, self.y, self.xscale * 3 + math.random(2), false)
+	
 	if selfData.targets then
 		for actor, angle in pairs(selfData.targets) do
 			if actor:isValid() then
@@ -399,13 +422,27 @@ objIce:addCallback("step", function(self)
 	end
 
 	if self:isValid() and self.sprite == iceSpriteIdle then
-		if selfData.parent and selfData.life % 5 == 0 then
+		if selfData.parent then --and selfData.life % 5 == 0 then
 			local r = 20
 			local actors = ParentObject.find("actors"):findAllEllipse(self.x - r, self.y - r, self.x + r, self.y + r)
 			for _, actor in ipairs(actors) do
-				if actor:isValid() and not actor:getData().hitIce and actor:get("team") ~= selfData.parent:get("team") then
-					selfData.parent:fireBullet(self.x, self.y, 0, 1, 1):set("specific_target", actor.id)
-					actor:getData().hitIce = 40
+				if actor:isValid() and actor:get("team") ~= selfData.parent:get("team") then
+					if actor:get("frozen") == 0 then
+						--selfData.parent:fireBullet(self.x, self.y, 0, 1, 1):set("specific_target", actor.id)
+						--actor:getData().hitIce = selfData.life--40
+						actor:set("frozen", 1)
+						actor:setAlarm(7, selfData.life)
+						actor:setAlarm(2, selfData.life)
+						actor:setAlarm(3, selfData.life)
+						actor:setAlarm(4, selfData.life)
+						actor:setAlarm(5, selfData.life)
+						actor:getData().icePos = actor.x
+					else
+						if actor:getData().icePos then
+							actor.x = actor:getData().icePos
+						end
+						actor:set("pHspeed", 0)
+					end
 				end
 			end
 		end
@@ -475,12 +512,14 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
         end
     elseif skill == 2.2 then
         if relevantFrame == 3 then
-            local bullet = objNanoBomb:create(player.x + player.xscale * 5, player.y - (12 + playerData.charge))
+            local bullet = objNanoBomb:create(player.x + player.xscale * 5, player.y)
             local dir = player.xscale
             bullet:getData().parent = player
             bullet.xscale = 1 + (playerData.charge / 8)
             bullet.yscale = 1 + (playerData.charge / 8)
-            bullet:getData().direction = 90 - (60 - playerData.charge * 5) * dir
+            bullet:getData().direction = player:getFacingDirection() + (playerData.charge * 4) * dir
+			bullet:getData().team = playerAc.team
+			bullet:getData().damage = playerAc.damage 
             bullet.angle = bullet:getData().direction
             bullet:getData().charge = playerData.charge
         end
@@ -512,6 +551,9 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
                     bullet:set("climb", i * 8)
                 end
             end
+			local fire = Object.find("EfSparks"):create(player.x + 5 * player.xscale, player.y - 1)
+			fire.sprite = Sprite.find("PyroFire")
+			fire.xscale = player.xscale
         end
         if player.subimage > player.sprite.frames - 1 and player:getData().flamethrowerLoops ~= 0 then
             player.subimage = 1
@@ -521,11 +563,24 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
     end -- elseif
 end)
 
-callback.register("onActorStep", function(actor)
+--[[callback.register("onActorStep", function(actor)
 	if actor:isValid() and actor:getData().hitIce then
 		actor:getData().hitIce = actor:getData().hitIce - 1
 		if actor:getData().hitIce == 0 then
 			actor:getData().hitIce = nil
 		end
+	end
+end)]]
+
+callback.register("onPlayerHUDDraw", function(player, x, y)
+	local cd = math.min(player:get("z_alarm"), Ability.getCooldown(player, "z")) --this sucks but i dont fully understand the ability charge lib, why is there no function to get individual charge cooldown?
+	if player:getSurvivor() == arti and cd > 0 then
+		local t = math.ceil(cd / 60)
+		graphics.alpha(0.7)
+		graphics.color(Color.BLACK)
+		graphics.rectangle(x, y, x + 17, y + 17, false)
+		graphics.alpha(1)
+		graphics.color(Color.WHITE)
+		graphics.print(t, x + 9, y + 2, graphics.FONT_LARGE, graphics.ALIGN_MIDDLE, graphics.ALIGN_TOP)
 	end
 end)

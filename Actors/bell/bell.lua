@@ -34,8 +34,6 @@ EliteType.registerPalette(sprites.palette, bell)
 
 local actors = ParentObject.find("actors", "vanilla")
 local player = Object.find("P", "vanilla")
-local enemy = ParentObject.find("enemies", "vanilla")
-
 
 local spikeSpr = Sprite.load("EfSpikeball", path.."spikeball", 6, 6, 7)
 local spikeMask = Sprite.load(path.."spikeMask", 1, 6, 7)

@@ -251,7 +251,7 @@ beetleGAlly:addCallback("step", function(actor)
 	
 	local parent = data.parent
 	if parent and parent:isValid() then
-		if Distance(actor.x, actor.y, parent.x, parent.y) > shouldBeWithinXOfParent and Distance(actor.x, actor.y, parent.x, parent.y) <= shouldBeWithinXOfParent / 3 and actor.x >= parent.x - 16 and actor.x <= parent.x + 16 then
+		if distance(actor.x, actor.y, parent.x, parent.y) > shouldBeWithinXOfParent and distance(actor.x, actor.y, parent.x, parent.y) <= shouldBeWithinXOfParent / 3 and actor.x >= parent.x - 16 and actor.x <= parent.x + 16 then
 			if parent.x > actor.x then
 				actor:set("moveLeft", 1)
 				actor:set("moveRight", 0)
@@ -259,7 +259,7 @@ beetleGAlly:addCallback("step", function(actor)
 				actor:set("moveLeft", 0)
 				actor:set("moveRight", 1)
 			end
-		elseif Distance(actor.x, actor.y, parent.x, parent.y) > tpToParentRange then
+		elseif distance(actor.x, actor.y, parent.x, parent.y) > tpToParentRange then
 			actor.x = parent.x
 			actor.y = parent.y - actor.sprite.yorigin
 		end

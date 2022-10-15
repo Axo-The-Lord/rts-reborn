@@ -44,7 +44,8 @@ local Actors = {
   "newt",
   "beetle",
   "beetleGuard",
-  "bell"
+  "bell",
+  "roboball"
 }
 for _, actor in ipairs(Actors) do
 	require("Actors."..actor.."."..actor)
