@@ -7,11 +7,11 @@ local Libraries = {
   "abilityCharge",
   "lunar",
   "barrier",
-  "mapObjectLib" -- This version of MapObjectLib is really old and I don't want to use it but for some reason everything breaks when I try to use the newest version aaaaaaaaaaaa
-
+  "mapObjectLib", -- This version of MapObjectLib is really old and I don't want to use it but for some reason everything breaks when I try to use the newest version aaaaaaaaaaaa
+  "monsterLib"
 }
 for _, core in ipairs(Libraries) do
-  local c = require("Core."..core)
+  require("Core."..core)
 end
 
 -- MISCELLANEOUS --
@@ -23,7 +23,7 @@ local Miscellaneous = {
   "contributors"
 }
 for _, misc in ipairs(Miscellaneous) do
-  local m = require("Misc."..misc)
+  require("Misc."..misc)
 end
 
 -- MAPOBJECTS --
@@ -35,13 +35,20 @@ local MapObjects = {
   -- "useBarrel" disabled
 }
 for _, mapobject in ipairs(MapObjects) do
-  local mo = require("MapObjects."..mapobject)
+  require("MapObjects."..mapobject)
 end
 
 -- ACTORS --
 
-require("Actors.newt")
--- require("Actors.beetle.beetle") disabled
+local Actors = {
+  "newt",
+  "beetle",
+  "beetleGuard",
+  "bell"
+}
+for _, actor in ipairs(Actors) do
+	require("Actors."..actor.."."..actor)
+end
 
 -- ITEMS --
 
@@ -77,7 +84,7 @@ local Items = {
   "goragsOpus"
 }
 for _, item in ipairs(Items) do
-  local i = require("Items."..item)
+  require("Items."..item)
 end
 
 -- SURVIVORS --
