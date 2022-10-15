@@ -2,7 +2,7 @@
 
 local item = Item("Focus Crystal")
 item.pickupText = "Deal bonus damage to nearby enemies."
-item.sprite = Sprite.load("Items/resources/crystal.png", 1, 11, 13)
+item.sprite = Sprite.load("Items/resources/crystal.png", 1, 13, 13)
 item:setTier("common")
 
 local effectRange = 35
@@ -19,7 +19,7 @@ end)
 -- Draw
 callback.register("onPlayerDrawBelow", function(player)
     if player:countItem(item) > 0 then
-        graphics.color(Color.fromHex(0xE73A4A))
+        graphics.color(Color.fromHex(0xFF4041))
         graphics.alpha(0.5 + math.sin(timer * 0.05) * 0.2)
         graphics.circle(player.x, player.y, effectRange, true)
     end

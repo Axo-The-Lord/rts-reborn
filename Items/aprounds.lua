@@ -2,7 +2,7 @@
 
 local item = Item("Armor-Piercing Rounds")
 item.pickupText = "Deal extra damage to bosses."
-item.sprite = Sprite.load("Items/resources/aprounds.png", 1, 12, 13)
+item.sprite = Sprite.load("Items/resources/aprounds.png", 1, 13, 15)
 item:setTier("common")
 
 callback.register("onHit", function(damager, actor, x, y)

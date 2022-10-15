@@ -2,7 +2,7 @@
 
 local item = Item("Backup Magazine")
 item.pickupText = "Add another charge of your 2nd skill."
-item.sprite = Sprite.load("Items/resources/backupMag.png", 1, 11, 12)
+item.sprite = Sprite.load("Items/resources/backupMag.png", 1, 13, 14)
 item:setTier("common")
 
 item:addCallback("pickup", function(player)

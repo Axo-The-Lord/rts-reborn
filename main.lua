@@ -50,8 +50,8 @@ local Items = {
   "aprounds",
   "backupMag",
   "crystal",
-  -- "steak", disabled
-  -- "raplate", disabled
+  -- "steak", disabled (bitter root exists)
+  -- "armorPlate", disabled (tough times exists)
   -- Uncommon
   "warhorn",
   "pauldron",

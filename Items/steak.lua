@@ -1,6 +1,6 @@
 local item = Item.new("Bison Steak")
 item.pickupText = "Gain 25 max health."
-item.sprite = Sprite.load("Items/resources/steak.png", 1, 12, 13)
+item.sprite = Sprite.load("Items/resources/steak.png", 1, 13, 10)
 item:setTier("common")
 
 item:addCallback("pickup", function(player)

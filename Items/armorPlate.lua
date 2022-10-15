@@ -2,7 +2,7 @@
 
 local item = Item("Repulsion Armor Plate")
 item.pickupText = "Reduces all damage taken by five."
-item.sprite = Sprite.load("Items/resources/armorPlate.png", 1, 12, 13)
+item.sprite = Sprite.load("Items/resources/armorPlate.png", 1, 10, 11)
 item:setTier("common")
 
 callback.register("onHit", function(damager,hit)

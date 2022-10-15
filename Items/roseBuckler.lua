@@ -2,7 +2,7 @@
 
 local item = Item("Rose Buckler")
 item.pickupText = "Reduce incoming damage after moving for some time."
-item.sprite = Sprite.load("Items/resources/roseBuckler.png", 1, 11, 12)
+item.sprite = Sprite.load("Items/resources/roseBuckler.png", 1, 12, 11)
 item:setTier("uncommon")
 
 local armorBuff = Buff.new("Rose Buckler")
