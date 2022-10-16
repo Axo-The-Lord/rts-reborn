@@ -298,7 +298,7 @@ beetleGAlly:addCallback("destroy", function(actor)
 end)
 
 local monsCard = MonsterCard.new("Beetle Guard", beetleG)
-monsCard.cost = 400
+monsCard.cost = 100
 monsCard.type = "classic"
 monsCard.sound = sounds.spawn
 monsCard.sprite = sprites.spawn

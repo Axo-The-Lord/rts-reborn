@@ -2,7 +2,7 @@
 
 local sound = Sound.load("MapObjects/resources/bud.ogg")
 local smoke = ParticleType.find("Dust2", "vanilla")
-local color = tostring(LunarColor.gml)
+local color = tostring(LunarColor.gml) -- had to unuse this
 
 local lunarBud = MapObject.new({
 	name = "Lunar Bud",
@@ -13,9 +13,10 @@ local lunarBud = MapObject.new({
 	affectPurchases = true,
 	costIncrease = 1,
 	mask = Sprite.load("budMask", "MapObjects/resources/budMask", 4, 3, 17),
-	activeText = "&"..color.."&&$& LUNAR&!&",
+	activeText = "&b&&$& LUNAR&!&",
 	useText = "&w&Press&!& &y&'"..input.getControlString("enter").."'&!& &w&to open Lunar Bud&!& &y&(&$& Lunar)&!&",
 	maxUses = 1,
+	useXOff = 40,
 	triggerFireworks = true
 })
 

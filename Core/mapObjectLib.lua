@@ -323,6 +323,7 @@ MapObject.new = function(properties) --Creates a brand new Map Object using the 
                 if string.find(activeFormatted, "%a") then
                     font = true
                 end
+				print(activeFormatted, activeText)
                 graphics.alpha(0.7+(math.random()*0.15))
                 if font then
                     graphics.printColor(activeText, self.x - (graphics.textWidth(activeFormatted, NewDamageFont) / 2), self.y + (graphics.textHeight(activeFormatted, NewDamageFont)), NewDamageFont)
