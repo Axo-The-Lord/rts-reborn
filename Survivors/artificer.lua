@@ -109,7 +109,7 @@ arti:addCallback("useSkill", function(player, skill)
 			end
 		elseif skill == 2 then
 			player:getData().charge = nil
-			player:survivorActivityState(2.1, player:getAnimation("shoot2_charge"), 0.12, true, true)
+			player:survivorActivityState(2.1, player:getAnimation("shoot2_charge"), 0.06, true, true)
 		elseif skill == 3 then
 			player:survivorActivityState(3, player:getAnimation("shoot3"), 0.25, true, true)
 		elseif skill == 4 then
@@ -313,7 +313,7 @@ objNanoBomb:addCallback("step", function(self)
 				Object.find("ChainLightning"):create(self.x, self.y):set("parent", selfData.parent.id):set("team", selfData.team):set("damage", math.ceil(selfData.damage)):set("bounce", 2)
 			end
 			--Sound.find("ChainLightning"):play((0.9 / self.xscale) + math.random() * 0.2)
-			sndShoot2:play(0.9 + math.random() * 0.2, 0.8)
+			sndShoot2_impact:play(0.9 + math.random() * 0.2, 0.8)
 		end
 		self:destroy()
 	else
@@ -327,10 +327,10 @@ objNanoBomb:addCallback("step", function(self)
 			if self:collidesWith(actor, self.x, self.y) and actor:get("team") ~= selfData.parent:get("team") then
 				selfData.parent:fireExplosion(self.x, self.y, 30/19, 30/4, 2)
 				for i = 1, 3 do
-					Object.find("ChainLightning"):create(self.x, self.y):set("parent", selfData.parent.id):set("team", selfData.team):set("damage", selfData.damage):set("bounce", 2)
+					Object.find("ChainLightning"):create(self.x, self.y):set("parent", selfData.parent.id):set("team", selfData.team):set("damage", math.ceil(selfData.damage)):set("bounce", 2)
 				end
 				--Sound.find("ChainLightning"):play((0.9 / self.xscale) + math.random() * 0.2)
-				sndShoot2:play(0.9 + math.random() * 0.2, 0.8)
+				sndShoot2_impact:play(0.9 + math.random() * 0.2, 0.8)
 				self:destroy()
 				break
 			end
@@ -507,7 +507,9 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
             playerData.charge = math.floor(player.subimage)
             player.subimage = player.sprite.frames - 1
         end
-		sndShoot2:play(0.9 + math.random() * 0.2)
+		if relevantFrame == 1 then
+			sndShoot2:play(0.9 + math.random() * 0.2)
+		end
         if player.subimage > player.sprite.frames - 1 then
             player:set("activity", 0)
             if not playerData.charge then
@@ -550,9 +552,9 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
                 if math.chance(50) then
                     bullet:getData().doIgnite = true
                 end
-                if not sndShoot4_loop:isPlaying() then
-                    sndShoot4_loop:play()
-                end
+                --if not sndShoot4_loop:isPlaying() then
+                --    sndShoot4_loop:play()
+                --end
                 if i ~= 0 then
                     bullet:set("climb", i * 8)
                 end
@@ -561,9 +563,13 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
 			fire.sprite = Sprite.find("PyroFire")
 			fire.xscale = player.xscale
         end
-        if player.subimage > player.sprite.frames - 1 and player:getData().flamethrowerLoops ~= 0 then
-            player.subimage = 1
-            player:getData().flamethrowerLoops = player:getData().flamethrowerLoops - 1
+        if player.subimage > player.sprite.frames - 1 then 
+			if player:getData().flamethrowerLoops == 0 then
+				sndShoot4_end:play(0.9 + math.random() * 0.2, 0.8)
+			else
+				player.subimage = 1
+				player:getData().flamethrowerLoops = player:getData().flamethrowerLoops - 1
+			end
         end
         playerData.timer = playerData.timer + 1
     end -- elseif
