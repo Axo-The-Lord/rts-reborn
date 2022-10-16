@@ -3,13 +3,13 @@
 local path = "Actors/beetle/"
 
 local sprites = {
-    idle = Sprite.load("BeetleIdle", path.."idle", 1, 6,11),
-    walk = Sprite.load("BeetleWalk", path.."walk", 7, 7,12),
-    jump = Sprite.load("BeetleJump", path.."jump", 1, 6,12),
-    shoot1 = Sprite.load("BeetleShoot1", path.."shoot1", 10, 6, 14),
-    spawn = Sprite.load("BeetleSpawn", path.."spawn", 13,8,12),
-    death = Sprite.load("BeetleDeath", path.."death", 6, 19,15),
-    mask = Sprite.load("BeetleMask", path.."idle", 1, 6,11),
+    idle = Sprite.load("BeetleIdle", path.."idle", 1, 6, 9),
+    walk = Sprite.load("BeetleWalk", path.."walk", 7, 7,10),
+    jump = Sprite.load("BeetleJump", path.."jump", 1, 6,10),
+    shoot1 = Sprite.load("BeetleShoot1", path.."shoot1", 10, 6, 12),
+    spawn = Sprite.load("BeetleSpawn", path.."spawn", 13,8,10),
+    death = Sprite.load("BeetleDeath", path.."death", 6, 19,13),
+    mask = Sprite.load("BeetleMask", path.."mask", 1, 6, 9),
     palette = Sprite.load("BeetlePal", path.."palette", 1, 0,0),
     hit = Sprite.find("Bite1", "vanilla"),
 	portrait = Sprite.load("BeetlePortrait", path.."portrait", 1, 119, 199)
@@ -74,7 +74,7 @@ card.sprite = sprites.spawn
 card.sound = sounds.spawn
 card.canBlight = true
 card.type = "classic"
-card.cost = 8
+card.cost = 4
 for _, elite in ipairs(EliteType.findAll("vanilla")) do
     card.eliteTypes:add(elite)
 end

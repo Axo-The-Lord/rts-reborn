@@ -13,12 +13,12 @@ local sprites = {
 	utility = Sprite.load("specialtyChest3", "MapObjects/resources/categoryChestUtility", 8, 20, 16)
 }
 
-local SyncChest = net.Packet.new("Sync Category Chest", function(player, x, y, item)
+--[[local SyncChest = net.Packet.new("Sync Category Chest", function(player, x, y, item) -- items are synced by default
 	local i = Item.find(item)
 	if i then
 		i:create(x, y)
 	end
-end)
+end)]]
 
 local openSnd = Sound.find("Chest1", "vanilla")
 local command = Artifact.find("Command", "vanilla")
@@ -79,7 +79,6 @@ callback.register("postLoad", function()
 		damage:add(Item.find("Needles", "Starstorm"))
 		damage:add(Item.find("Strange Can", "Starstorm"))
 		damage:add(Item.find("Poisonous Gland", "Starstorm"))
-		damage:add(Item.find("Hunter's Sigil", "Starstorm"))
 		damage:add(Item.find("Cryptic Source", "Starstorm"))
 		damage:add(Item.find("Man-o'-war", "Starstorm"))
 		damage:add(Item.find("Green Chocolate", "Starstorm"))
@@ -88,6 +87,9 @@ callback.register("postLoad", function()
 		damage:add(Item.find("Galvanic Core", "Starstorm"))
 		damage:add(Item.find("Insecticide", "Starstorm"))
 		damage:add(Item.find("Juddering Egg", "Starstorm"))
+		damage:add(Item.find("Prototype Jet Boots", "Starstorm"))
+		damage:add(Item.find("Hottest Sauce", "Starstorm"))
+		damage:add(Item.find("Droid Head", "Starstorm"))
 	end
 end)
 
@@ -196,16 +198,14 @@ callback.register("postLoad", function()
 		util:add(Item.find("X-4 Stimulant", "Starstorm"))
 		util:add(Item.find("Broken Blood Tester", "Starstorm"))
 		util:add(Item.find("Balloon", "Starstorm"))
-		util:add(Item.find("Prototype Jet Boots", "Starstorm"))
 		util:add(Item.find("Roulette", "Starstorm"))
+		util:add(Item.find("Hunter's Sigil", "Starstorm"))
 		util:add(Item.find("Crowning Valiance", "Starstorm"))
 		util:add(Item.find("Metachronic Trinket", "Starstorm"))
-		util:add(Item.find("Hottest Sauce", "Starstorm"))
 		util:add(Item.find("Low Quality Speakers", "Starstorm"))
 		util:add(Item.find("Field Accelerator", "Starstorm"))
 		util:add(Item.find("Vaccine", "Starstorm"))
 		util:add(Item.find("Nkota's Heritage", "Starstorm"))
-		util:add(Item.find("Droid Head", "Starstorm"))
 		util:add(Item.find("Baby's Toys", "Starstorm"))
 		util:add(Item.find("Composite Injector", "Starstorm"))
 		util:add(Item.find("Swift Skateboard", "Starstorm"))
@@ -257,11 +257,15 @@ callback.register("onObjectActivated", function(objectInstance, frame, player, x
 				pool = util
 			end
 			if net.host then
-				local item = pool:roll()
-				item:create(objectInstance.x, objectInstance.y - objectInstance.sprite.height)
-				if net.online then
-					SyncChest:sendAsHost("all", nil, objectInstance.x, objectInstance.y - objectInstance.sprite.height, item:getObject():getName())
+				if command.active then
+					pool:getCrate():create(objectInstance.x, objectInstance.y - objectInstance.sprite.height)
+				else
+					local item = pool:roll()
+					item:create(objectInstance.x, objectInstance.y - objectInstance.sprite.height)
 				end
+				--if net.online then
+					--SyncChest:sendAsHost("all", nil, objectInstance.x, objectInstance.y - objectInstance.sprite.height, item:getObject():getName())
+				--end
 			end
 		end
 	end

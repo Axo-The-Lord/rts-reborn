@@ -323,7 +323,7 @@ MapObject.new = function(properties) --Creates a brand new Map Object using the 
                 if string.find(activeFormatted, "%a") then
                     font = true
                 end
-				print(activeFormatted, activeText)
+				--print(activeFormatted, activeText)
                 graphics.alpha(0.7+(math.random()*0.15))
                 if font then
                     graphics.printColor(activeText, self.x - (graphics.textWidth(activeFormatted, NewDamageFont) / 2), self.y + (graphics.textHeight(activeFormatted, NewDamageFont)), NewDamageFont)
@@ -696,6 +696,130 @@ MapObject.PresetRules = {
         end
     end,
 }]]
+
+
+
+
+
+-- frankenstein part from SS :)
+local customSpawnInteractables = {}
+MapObject.customSpawnRules = function(object, rules)
+	local stages, chance, min, max, mpScale, chanceScaling, achievementRequirement
+	if type(rules) == "table" then
+		stages = rules.stages
+		chance = rules.chance
+		min = rules.min
+		max = rules.max
+		mpScale = rules.mpScale
+		chanceScaling = rules.chanceScale
+		ignoreSacrifice = rules.ignoreSacrifice
+		achievementRequirement = rules.achievementRequirement
+	end
+	
+	local id = #customSpawnInteractables + 1
+	local interactable = {
+		id = id,
+		object = object,
+		stages = stages or {},
+		chance = chance or 100,
+		min = min or 1,
+		max = max or 1,
+		mpScale = mpScale or 0,
+		chanceScaling = chanceScaling or 0,
+		ignoreSacrifice = ignoreSacrifice or false,
+		achievementRequirement = achievementRequirement
+	}
+	table.insert(customSpawnInteractables, interactable)
+end
+
+local ftimer = nil
+local sacrifice = false
+callback.register("onStageEntry", function()
+	ftimer = 7
+	local sacrifice = Artifact.find("Sacrifice").active
+end)
+local objB = Object.find("B")
+local objBase = Object.find("Base")
+local objTeleporterFake = Object.find("TeleporterFake")
+local mapObjects = ParentObject.find("mapObjects")
+
+local syncInteractableSpawn = net.Packet.new("RTSIntSpawn", function(player, interactable, x, y)
+	if interactable and x and y then
+		local instance = interactable:create(x, y)
+	end
+end)
+
+callback.register("onStep", function()
+	if ftimer and ftimer <= 0 then
+		if net.host then
+			for _, interactable in pairs(customSpawnInteractables) do
+				if not sacrifice or interactable.ignoreSacrifice then
+					if not interactable.achievementRequirement or interactable.achievementRequirement:isComplete() then
+						if contains(interactable.stages, Stage:getCurrentStage()) then
+							local mult = 1
+							if interactable.mpScale ~= 0 then mult = math.ceil((1 - interactable.mpScale) + (interactable.mpScale * #misc.players)) end
+							for i = 1, math.random(interactable.min, interactable.max) * mult do
+							
+								local chance = interactable.chance
+								
+								if interactable.chanceScaling then
+									chance = math.max(interactable.chance + (interactable.chanceScaling * misc.director:get("stages_passed")), 0)
+								end
+								
+								local firstChance = math.max(chance, 1)
+								local secondChance = chance * 100
+								
+								if math.chance(firstChance) and math.chance(secondChance) then
+									local grounds = {}
+									
+									for _, ground in ipairs(objB:findAll()) do
+										if ground.sprite.width * ground.xscale > interactable.object.sprite.width and not ground:collidesWith(objBase, ground.x, ground.y - 1) and not ground:collidesWith(objTeleporterFake, ground.x, ground.y - 1) then
+											table.insert(grounds, ground)
+										end
+									end
+									
+									if #grounds > 0 then
+										local ground, groundL, groundR, x, y
+										
+										local ww = interactable.object.sprite.width / 2
+										
+										ground = table.irandom(grounds)
+										groundL = ground.x - (ground.sprite.boundingBoxLeft * ground.xscale) + ww
+										groundR = ground.x + (ground.sprite.boundingBoxRight * ground.xscale) - ww
+										x = math.random(groundL, groundR)
+										y = ground.y
+										
+										for i = 0, 10 do
+											if mapObjects:findRectangle(x - ww, y - 20, x + ww, y + 10) then
+												ground = table.irandom(grounds)
+												groundL = ground.x - (ground.sprite.boundingBoxLeft * ground.xscale) + ww
+												groundR = ground.x + (ground.sprite.boundingBoxRight * ground.xscale) - ww
+												x = math.random(groundL, groundR)
+												y = ground.y
+											else
+												break
+											end
+										end
+										
+										interactable.object:create(x, y)
+										
+										if net.online then
+											syncInteractableSpawn:sendAsHost(net.ALL, nil, interactable.object, x, y)
+										end
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+		ftimer = nil
+	elseif ftimer and ftimer > 0 then
+		ftimer = ftimer - 1
+	end
+end)
+
 
 
 

@@ -31,6 +31,8 @@ local sprIgnite = Sprite.load("igniteBuff", path.."ignite.png", 8, 10, 8)
 local sndEnvSuit = Sound.load("arti_env", path.."envSuit.ogg") -- Should honestly make a table...
 local sndShoot1 = Sound.load("arti_shoot1", path.."shoot1.ogg")
 local sndShoot1_impact = Sound.load("arti_shoot1_impact", path.."shoot1_impact.ogg")
+local sndShoot2 = Sound.load("arti_shoot2", path.."shoot2.ogg")
+local sndShoot2_impact = Sound.load("arti_shoot2_impact", path.."shoot2_impact.ogg")
 local sndShoot4_start = Sound.load("arti_shoot4_start", path.."shoot4_start.ogg")
 local sndShoot4_loop = Sound.load("arti_shoot4_loop", path.."shoot4_loop.ogg")
 local sndShoot4_end = Sound.load("arti_shoot4_end", path.."shoot4_end.ogg")
@@ -308,9 +310,10 @@ objNanoBomb:addCallback("step", function(self)
 		if selfData.parent then
 			selfData.parent:fireExplosion(self.x, self.y, 30/19, 30/4, 2)
 			for i = 1, 3 do
-				Object.find("ChainLightning"):create(self.x, self.y):set("parent", selfData.parent.id):set("team", selfData.team):set("damage", selfData.damage):set("bounce", 2)
+				Object.find("ChainLightning"):create(self.x, self.y):set("parent", selfData.parent.id):set("team", selfData.team):set("damage", math.ceil(selfData.damage)):set("bounce", 2)
 			end
-			Sound.find("ChainLightning"):play((0.9 / self.xscale) + math.random() * 0.2)
+			--Sound.find("ChainLightning"):play((0.9 / self.xscale) + math.random() * 0.2)
+			sndShoot2:play(0.9 + math.random() * 0.2, 0.8)
 		end
 		self:destroy()
 	else
@@ -326,7 +329,8 @@ objNanoBomb:addCallback("step", function(self)
 				for i = 1, 3 do
 					Object.find("ChainLightning"):create(self.x, self.y):set("parent", selfData.parent.id):set("team", selfData.team):set("damage", selfData.damage):set("bounce", 2)
 				end
-				Sound.find("ChainLightning"):play((0.9 / self.xscale) + math.random() * 0.2)
+				--Sound.find("ChainLightning"):play((0.9 / self.xscale) + math.random() * 0.2)
+				sndShoot2:play(0.9 + math.random() * 0.2, 0.8)
 				self:destroy()
 				break
 			end
@@ -503,6 +507,7 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
             playerData.charge = math.floor(player.subimage)
             player.subimage = player.sprite.frames - 1
         end
+		sndShoot2:play(0.9 + math.random() * 0.2)
         if player.subimage > player.sprite.frames - 1 then
             player:set("activity", 0)
             if not playerData.charge then
@@ -512,6 +517,7 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
         end
     elseif skill == 2.2 then
         if relevantFrame == 3 then
+			sndShoot2:stop()
             local bullet = objNanoBomb:create(player.x + player.xscale * 5, player.y)
             local dir = player.xscale
             bullet:getData().parent = player

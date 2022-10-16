@@ -37,9 +37,6 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 
 ## MAPOBJECTS
 
-**categoryChest**
-* Command functionality not implemented
-
 **lunarBud**
 * Fix the smoke effect. This could probably be a particle of its own, perhaps similar to SPEE-D's or F.A.E's.
 * Active Text is super displaced for some reason??
@@ -48,7 +45,6 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 * This mostly served as a test to see if the mapObjectLib worked. I'm going to leave it here for now in case you need something to test the mapObjectLib, but it will not make it to final release.
 
 **MapObjects that haven't been started yet:**
-* Combat Shrine
 * Lunar Cauldron
 * Shop Buds
 * Newt Altars
@@ -79,6 +75,7 @@ This Readme is going to act a lot like a To-Do list for those of you who are int
 
 **Artificer**
 * A lot of stuff, I'll figure out exactly what we need as we go.
+* Could use a polish pass
 
 ## STAGES
 

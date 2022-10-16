@@ -48,13 +48,15 @@ registercallback("onObjectActivated", function(objectInstance, frame, player, x,
 	end
 end)
 
-registercallback("onObjectFailure", function(objectInstance, player)
-	if objectInstance:getObject() == lunarBud then
+registercallback("onObjectFailure", function(lunarBud, player)
+	if objectInstance:isValid() and objectInstance:getObject() == lunarBud then
 		Sound.find("Error", "vanilla"):play(1)
 	end
 end)
 
 -- Stages
+local stages = {}
+
 local stageBlacklist = {}
 if modloader.checkMod("Starstorm") then
 	table.insert(stageBlacklist, Stage.find("The Void", "Starstorm"))
@@ -68,15 +70,24 @@ if modloader.checkMod("Starstorm") then
 end
 
 local budCard = Interactable.new(lunarBud, "lunarBud")
-budCard.spawnCost = 175
+--budCard.spawnCost = 175
 
 for _, stage in ipairs(Stage.findAll("vanilla")) do
-	stage.interactables:add(budCard)
+	table.insert(stages, stage)
 end
 if modloader.checkMod("Starstorm") then
 	for _, ss_stage in ipairs(Stage.findAll("Starstorm")) do
 		if not contains(stageBlacklist, ss_stage) then
-			ss_stage.interactables:add(budCard)
+			table.insert(stages, stage)
 		end
 	end
 end
+
+MapObject.customSpawnRules(lunarBud, {
+	stages = stages,
+	chance = 80,
+	min = 1,
+	max = 2,
+	mpScale = 0.5
+})
+
