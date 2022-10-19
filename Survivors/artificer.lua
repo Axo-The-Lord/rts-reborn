@@ -153,19 +153,23 @@ callback.register("onPlayerStep", function(player)
 		end
 		if player:get("activity") ~= 30 and player:get("moveUpHold") == 1 and player:get("free") == 1 and playerData.geyser <= 0 then
 			playerData.envSuit = playerData.envSuit + 1
-			if playerData.envSuit == 15 then
-				sndEnvSuit:play(0.8 + math.random() * 0.2, 0.7)
-			end
 			if playerData.envSuit >= 15 then
-				player:set("pVspeed", 0)
-				if playerData.envSuit % 5 == 0 then
-					envParticle:burst("middle", player.x - (2 * player.xscale), player.y, 1)
-					envParticle:burst("middle", player.x + (1 * player.xscale), player.y, 1)
-					player:set("pVspeed", player:get("pGravity1"))
+				if player:get("pVspeed") > 0 then
+					if not playerData.envSound then
+						playerData.envSound = true
+						sndEnvSuit:play(0.8 + math.random() * 0.2, 0.7)
+					end
+					player:set("pVspeed", 0)
+					if playerData.envSuit % 5 == 0 then
+						envParticle:burst("middle", player.x - (2 * player.xscale), player.y, 1)
+						envParticle:burst("middle", player.x + (1 * player.xscale), player.y, 1)
+						player:set("pVspeed", player:get("pGravity1"))
+					end
 				end
 			end
 		else
 			playerData.envSuit = 0
+			playerData.envSound = nil
         end
 	end
 end)

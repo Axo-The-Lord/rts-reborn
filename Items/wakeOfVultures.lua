@@ -55,11 +55,11 @@ overloadingBuff.subimage = 4
 overloadingBuff.frameSpeed = 0
 overloadingBuff:addCallback("start", function(player)
 	player.blendColor = Color.fromHex(0x287CAE)
-	player:set("lightning", player:get("lightning") + 1)
+	player:set("lightning", player:get("lightning") + 2)
 end)
 overloadingBuff:addCallback("end", function(player)
 	player.blendColor = Color.WHITE
-	player:set("lightning", player:get("lightning") - 1)
+	player:set("lightning", player:get("lightning") - 2)
 end)
 
 local volatileBuff = Buff.new("Volatile")
@@ -107,5 +107,5 @@ item:setLog{
 
 -- Tab Menu
 if modloader.checkMod("Starstorm") then
-	TabMenu.setItemInfo(item, nil, "Gain the power of slained elites for 8 seconds.", "+5 second duration.")
+	TabMenu.setItemInfo(item, nil, "Gain the power of slain elites for 8 seconds.", "+5 second duration.")
 end

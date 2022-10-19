@@ -5,7 +5,7 @@ callback.register("onLoad", function()
 		local ogTitle = Sprite.find("sprTitle", "vanilla")
 		local ogLogo = Sprite.find("Logos", "vanilla")
 		if modloader.checkMod("Starstorm") then
-			ogTitle:replace(Sprite.load("Graphics/UI/title_2.png", 1, 205, 44))
+			ogTitle:replace(Sprite.load("Graphics/UI/title_2.png", 1, 193, 44))
 		else
 			ogTitle:replace(Sprite.load("Graphics/UI/title.png", 1, 205, 44))
 		end

@@ -67,7 +67,7 @@ local Items = {
   "deathMark",
   -- Rare
   "brainstalks",
-  --"wakeOfVultures", too ambitious for now, maybe
+  "wakeOfVultures",
   "afterburner",
   -- Boss
   -- "planula", no Grandparents yet :(
