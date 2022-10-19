@@ -49,7 +49,7 @@ registercallback("onObjectActivated", function(objectInstance, frame, player, x,
 end)
 
 registercallback("onObjectFailure", function(lunarBud, player)
-	if objectInstance:isValid() and objectInstance:getObject() == lunarBud then
+	if objectInstance:getObject() == lunarBud then
 		Sound.find("Error", "vanilla"):play(1)
 	end
 end)
@@ -90,4 +90,3 @@ MapObject.customSpawnRules(lunarBud, {
 	max = 2,
 	mpScale = 0.5
 })
-

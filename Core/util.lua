@@ -146,3 +146,72 @@ function AddMCardToStages(card,stages)
 		stage.enemies:add(card)
 	end
 end
+
+-- Creates one of multiple portals found in Risk of Rain 2. Returns the newly created Portal.
+-- NOTE: If you want to make a custom portal, please just use the "Portal" object.
+-- Parameters:
+    -- variant: The type of portal to spawn. Variants are listed below. Passing in a value not listed below will return a randomized Portal.
+        -- gold: Creates a portal to Gilded Coast.
+        -- celestial: Creates a portal to A Moment, Fractured.
+        -- blue: Creates a portal to Bazaar Between Time.
+        -- null: Creates a portal to Void Fields.
+        -- artifact: Creates a portal to or from Bulwark's Ambry.
+    -- x: The x coordinate to spawn the portal at.
+    -- y: The y coordinate to spawn the portal at.
+local portalMask = Sprite.load("artifactPortalMask", "Graphics/artifactPortalMask.png", 1, 35, 35)
+local bazaarGateway = Sprite.load("bazaarPortal", "Graphics/gateway2.png", 1, 22, 24)
+local artifactPortal = Sprite.load("artifactPortal", "Graphics/artifactPortal.png", 1, 35, 35)
+MakePortal = function(variant, x, y)
+    variant = string.lower(variant)
+    local portal = Object.find("Portal", "rts-reborn"):create(x,y)
+    local data = portal:getData()
+    if variant == "gold" then
+        portal.blendColor = Color.fromRGB(255, 200, 100)
+		data.rim = bazaarGateway
+        -- data.destination = nil
+    elseif variant == "celestial" then
+        portal.blendColor = Color.fromHex(0x72D6D6)
+        -- data.destination = Stage.find("A Moment, Fractured", "rts-reborn")
+    elseif variant == "blue" then
+        portal.blendColor = LunarColor
+		data.rim = bazaarGateway
+        -- data.destination = Stage.find("Bazaar Between Time", "rts-reborn")
+    elseif variant == "null" then
+        portal.blendColor = Color.fromRGB(50, 0, 50)
+        -- data.destination = Stage.find("Void Fields", "rts-reborn")
+    elseif variant == "artifact" then
+        portal.blendColor = Color.ROR_RED
+        portal.mask = portalMask
+        data.rim = artifactPortal
+    end
+    return portal
+end
+
+-- Creates one of multiple "orbs," which will create their respective Portal once the Teleporter is fully charged. Returns the newly created Orb, and its Portal.
+-- NOTE: If you want to make a custom orb, please just use the "Orb" object.
+-- Parameters:
+    -- variant: The type of portal to spawn. Variants are listed below. Passing in a value not listed below will return a randomized Orb and Portal.
+        -- gold: Creates a gold Orb, and a portal to Gilded Coast.
+        -- celestial: Creates a celestial Orb, and a portal to A Moment, Fractured.
+        -- blue: Creates a blue Orb, and a portal to Bazaar Between Time.
+MakeOrb = function(variant)
+    variant = string.lower(variant)
+    local tp = Object.find("Teleporter", "vanilla"):findNearest(0, 0)
+    if tp then
+        local orb = Object.find("Orb", "rts-reborn"):create(tp.x,tp.y)
+        local data = orb:getData()
+        local xx, yy
+        xx = tp.x + math.random(-200, 200)
+        yy = tp.y + math.random(-200, -20)
+        if variant == "gold" then
+            orb.blendColor = Color.fromRGB(255, 200, 100)
+        elseif variant == "celestial" then
+            orb.blendColor = Color.fromHex(0x72D6D6)
+        elseif variant == "blue" then
+            orb.blendColor = LunarColor
+        end
+        data.portal = MakePortal(variant, xx, FindGround(xx, yy) - 20)
+        data.portal:getData().activity = -1
+        return orb, data.portal
+    end
+end
