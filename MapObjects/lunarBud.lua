@@ -1,8 +1,26 @@
 -- Lunar Bud
 
+local budDust = Sprite.load("budDust", "MapObjects/Resources/budDust.png", 1, 18, 14)
 local sound = Sound.load("MapObjects/resources/bud.ogg")
-local smoke = ParticleType.find("Dust2", "vanilla")
 local color = tostring(LunarColor.gml) -- had to unuse this
+
+-- Timer
+local timer = 0
+callback.register("onStep", function()
+	timer = timer + 1
+end)
+
+local smoke = ParticleType.new("budSmoke")
+smoke:sprite(budDust, true, true, false)
+smoke:size(0.0002, 0.5, 0.005, 0.005)
+smoke:life(60, 150)
+smoke:direction(45, 145, 0, 1)
+smoke:alpha(0.1, 0.6, 0)
+smoke:angle(0, 360, 0.5, 0, true)
+smoke:gravity(0.0008, 90)
+smoke:color(LunarColor)
+smoke:additive(true)	
+smoke:speed(0.5, 1, -0.015, -0.01)
 
 local lunarBud = MapObject.new({
 	name = "Lunar Bud",
@@ -21,8 +39,8 @@ local lunarBud = MapObject.new({
 })
 
 lunarBud:addCallback("step", function(self)
-	if self:isValid() and self:get("dead") ~= 1 then
-		smoke:burst("below", self.x + math.random(-self.sprite.width / 4, self.sprite.width / 4), self.y + 5, 20)
+	if self:isValid() and self:get("dead") ~= 1 and timer % 30 == 0 then
+		smoke:burst("below", self.x, self.y + 5, 1)
 	end
 end)
 

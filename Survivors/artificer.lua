@@ -174,6 +174,26 @@ callback.register("onPlayerStep", function(player)
 	end
 end)
 
+-- Walk trail (might remove this later idk)
+local timer = 0 -- a timer
+callback.register("globalStep", function()
+	timer = timer + 0.25
+end)
+
+local walkTrail = Sprite.load("arti_walktrail", path.."walkTrail.png", 4, 5, 2)
+callback.register("onPlayerDraw", function(player)
+	if player:getSurvivor() == arti then
+		if player:get("free") == 0 then
+			graphics.drawImage{
+				image = walkTrail,
+				x = player.x,
+				y = player.y + 6,
+				subimage = (timer % walkTrail.frames - 1) + 1
+			}
+		end
+	end
+end)
+
 -- Ignite (Debuff)
 local igniteStacks = 8
 local ignite = {}
@@ -360,14 +380,14 @@ objNanoBomb:addCallback("step", function(self)
 end)
 objNanoBomb:addCallback("draw", function(self)
 	local selfData = self:getData()
-	
+
 	graphics.alpha(1)
 	graphics.color(Color.fromHex(0x7EB7FF))
 	graphics.circle(self.x, self.y, 2 + self.xscale * 3 + math.random(3), false)
 	graphics.alpha(1)
 	graphics.color(Color.fromHex(0x0014A9))
 	graphics.circle(self.x, self.y, self.xscale * 3 + math.random(2), false)
-	
+
 	if selfData.targets then
 		for actor, angle in pairs(selfData.targets) do
 			if actor:isValid() then
@@ -531,7 +551,7 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
             bullet.yscale = 1 + (playerData.charge / 8)
             bullet:getData().direction = player:getFacingDirection() + (playerData.charge * 4) * dir
 			bullet:getData().team = playerAc.team
-			bullet:getData().damage = playerAc.damage 
+			bullet:getData().damage = playerAc.damage
             bullet.angle = bullet:getData().direction
             bullet:getData().charge = playerData.charge
         end
@@ -551,7 +571,7 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
         if playerData.timer % 12 == 0 then
             for i = 0, player:get("sp") do
                 -- particle
-                local bullet = player:fireBullet(player.x, player.y - 2, player:getData().flamethrowerDirection, 60, 0.25, nil, DAMAGER_BULLET_PIERCE)
+                local bullet = player:fireBullet(player.x, player.y - 2, player:getData().flamethrowerDirection, 60, 0.95, nil, DAMAGER_BULLET_PIERCE)
                 bullet:set("damage_degrade", 0.5)
                 if math.chance(50) then
                     bullet:getData().doIgnite = true
@@ -567,7 +587,7 @@ arti:addCallback("onSkill", function(player, skill, relevantFrame)
 			fire.sprite = Sprite.find("PyroFire")
 			fire.xscale = player.xscale
         end
-        if player.subimage > player.sprite.frames - 1 then 
+        if player.subimage > player.sprite.frames - 1 then
 			if player:getData().flamethrowerLoops == 0 then
 				sndShoot4_end:play(0.9 + math.random() * 0.2, 0.8)
 			else

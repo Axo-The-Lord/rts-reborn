@@ -55,6 +55,7 @@ RTS comes with a few profile flags so you can customize your experience:
 - `rts-debug`: Outputs a whole bunch of stuff to the console. You probably won't need this unless you're a developer!
 - `rts-classic-meteor`: Change the Glowing Meteorite from a Lunar Item back into a regular Use Item.
 - `rts-classic-permafrost`: Remove Permafrost's execute ability.
+- `rts-mute-gesture`: Gesture of the Drowned does not trigger the activation sound.
 
 ---
 

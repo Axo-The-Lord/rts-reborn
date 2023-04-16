@@ -80,6 +80,7 @@ local Items = {
   "spinelTonic",
   "effigy",
   "meteor",
+  "gesture",
   -- Use
   "elephant",
   "hud",
